@@ -6,8 +6,8 @@
 
 #define maxText 100000			// Максимальная длина текста
 #define maxLex 100				// Максимальная длина лексемы
-#define maxKeyword 16			// Максимальная длина ключевого слова
-#define maxDecLex 10			// Максимальная длина числа
+#define maxKeyword 16			// Максимальное количество ключевых слов
+#define maxNumber 10			// Максимальная длина числа
 typedef char type_mod[maxText]; // Текст
 typedef char type_lex[maxLex];  // Лексема
 

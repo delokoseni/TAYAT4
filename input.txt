@@ -1,8 +1,10 @@
-void main()
+int main()
 {
-	int var = -0;
-	long varhex = 0x123;
-	int vars[16] = { 0, 1, 2, 3 };
+	int var = 0;
+	long varhex = 123;
+	float b = .666666666666;
+	float b1 = 6.6;
+	float b2 = 6.;
 	if (var)
 	{
 		function();
@@ -11,16 +13,14 @@ void main()
 	else
 		var = 5;
 		;;;
+	return 0;
 }
 
-void function()
+int function()
 {
 	short a1 = 1;
-	char c2 = 2;
 	// explaining division!
-	int ac12 = c2 / a1;
-	{
 	{
 	}
-	}
+	return a1;
 }

@@ -1,21 +1,25 @@
 ﻿#include <iostream>
 #include <iomanip>
+#include <windows.h>
+#include <fstream>
+#include <sstream>
+
 #include "Scaner.h"
 
-int main(int argc, char* argv[])
+int main()
 {
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
     Scaner* scaner;
     int type;
     type_lex lex;
+    scaner = new Scaner("input.txt");
 
-    if (argc <= 1)
-        scaner = new Scaner("input.txt");
-    else
-        scaner = new Scaner(argv[1]);
     do
     {
         type = scaner->UseScaner(lex);
-        std::cout << std::setw(32) << lex << "   type of:    " << type << std::endl;
+        std::cout << std::setw(16) << lex << "\tпринадлежит к типу №\t" << type << std::endl;
     } while (type != typeEnd);
 
     delete scaner;
