@@ -16,13 +16,14 @@ int indexKeyword[maxKeyword] =
     typeInt, typeShort, typeLong, typeFloat, typeWhile, typeMain, typeReturn
 };
 
+//Ошибка если файл пустой
 void Scaner::PutUK(size_t uk) 
 {
     if (uk < text.size()) 
     {
         this->uk = uk;
     }
-    else 
+    else if(text.size() != 0)
     {
         std::cerr << "Ошибка: индекс выходит за пределы размера текста." << std::endl;
     }
@@ -142,6 +143,7 @@ int Scaner::UseScaner(type_lex lex)
             }
             else
             {
+                lex[i] = '\0';
                 return typePoint;
             }
         }
