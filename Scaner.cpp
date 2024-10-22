@@ -1,16 +1,11 @@
-#define _CRT_SECURE_NO_WARNINGS
-
 #include "Scaner.h"
-#include <fstream>
-#include <sstream>
-#include <iostream>
 
 /**
 * Список допустимых ключевых слов в программе
 */
 type_lex keyword[maxKeyword] =
 {
-	"int", "short", "long", "float", "while", "main", "return"
+    "int", "short", "long", "float", "while", "main", "return"
 };
 
 /**
@@ -18,26 +13,34 @@ type_lex keyword[maxKeyword] =
 */
 int indexKeyword[maxKeyword] =
 {
-	typeInt, typeShort, typeLong, typeFloat, typeWhile, typeMain, typeReturn
+    typeInt, typeShort, typeLong, typeFloat, typeWhile, typeMain, typeReturn
 };
 
-void Scaner::PutUK(int uk)
+void Scaner::PutUK(size_t uk) 
 {
-	if (uk >= 0 && uk <= maxText)
-		this->uk = uk;
+    if (uk < text.size()) 
+    {
+        this->uk = uk;
+    }
+    else 
+    {
+        std::cerr << "Ошибка: индекс выходит за пределы размера текста." << std::endl;
+    }
 }
 
-int Scaner::GetUK()
+size_t Scaner::GetUK()
 {
-	return uk;
+    return uk;
 }
 
-void Scaner::PrintError(const char* error, const char* text)
+void Scaner::PrintError(const std::string& error, const std::string& text = "") 
 {
-	if (text[0] == '\0')
-		std::cout << error << std::endl;
-	else
-		std::cout << error << " " << text << std::endl;
+    std::cout << error;
+    if (!text.empty()) 
+    {
+        std::cout << " " << text;
+    }
+    std::cout << std::endl;
 }
 
 int Scaner::UseScaner(type_lex lex)
@@ -45,35 +48,35 @@ int Scaner::UseScaner(type_lex lex)
     int i = 0;
     lex[0] = '\0';
 
-    while (true) 
+    while (true)
     {
         // Пропускаем пробелы
-        while (text[uk] == ' ' || text[uk] == '\t' || text[uk] == '\n') 
+        while (uk < text.size() && (text[uk] == ' ' || text[uk] == '\t' || text[uk] == '\n'))
         {
             uk++;
         }
 
         // Конец программы 
-        if (text[uk] == '\0') 
+        if (uk >= text.size())
         {
             lex[i] = '\0';
             return typeEnd;
         }
 
         // Обработка комментариев
-        if (text[uk] == '/') 
+        if (text[uk] == '/')
         {
             uk++;
-            if (text[uk] == '/') 
+            if (uk < text.size() && text[uk] == '/')
             {
                 std::cout << "Строка комментария." << std::endl;
-                while (text[uk] != '\n' && text[uk] != '\0') 
+                while (uk < text.size() && text[uk] != '\n')
                 {
                     uk++;
                 }
-                continue;  
+                continue;
             }
-            else 
+            else
             {
                 // Деление
                 lex[i++] = '/';
@@ -83,24 +86,25 @@ int Scaner::UseScaner(type_lex lex)
         }
 
         // Обработка чисел
-        if (isdigit(text[uk])) 
+        if (isdigit(text[uk]))
         {
-            while (isdigit(text[uk]) && i < maxNumber - 1) 
+            while (uk < text.size() && isdigit(text[uk]) && i < maxNumber - 1)
             {
                 lex[i++] = text[uk++];
             }
 
             // Обработка вещественных чисел
-            if (text[uk] == '.') {
+            if (uk < text.size() && text[uk] == '.')
+            {
                 lex[i++] = text[uk++];
-                while (isdigit(text[uk]) && i < maxNumber - 1) 
+                while (uk < text.size() && isdigit(text[uk]) && i < maxNumber - 1)
                 {
                     lex[i++] = text[uk++];
                 }
                 lex[i] = '\0';
-                if (i == maxNumber - 1 && isdigit(text[uk]))
+                if (i == maxNumber - 1 && uk < text.size() && isdigit(text[uk]))
                 {
-                    while (isdigit(text[uk])) 
+                    while (uk < text.size() && isdigit(text[uk]))
                     {
                         uk++;
                     }
@@ -115,19 +119,19 @@ int Scaner::UseScaner(type_lex lex)
         }
 
         // Обработка точки
-        if (text[uk] == '.') 
+        if (text[uk] == '.')
         {
             lex[i++] = text[uk++];
-            if (isdigit(text[uk])) 
+            if (uk < text.size() && isdigit(text[uk]))
             {
-                while (isdigit(text[uk]) && i < maxNumber - 1) 
+                while (uk < text.size() && isdigit(text[uk]) && i < maxNumber - 1)
                 {
                     lex[i++] = text[uk++];
                 }
                 lex[i] = '\0';
-                if (i == maxNumber - 1 && isdigit(text[uk])) 
+                if (i == maxNumber - 1 && uk < text.size() && isdigit(text[uk]))
                 {
-                    while (isdigit(text[uk])) 
+                    while (uk < text.size() && isdigit(text[uk]))
                     {
                         uk++;
                     }
@@ -136,22 +140,24 @@ int Scaner::UseScaner(type_lex lex)
                 }
                 return typeFloat;
             }
-            else 
+            else
             {
                 return typePoint;
             }
         }
 
         // Обработка идентификаторов
-        if (isalpha(text[uk]) || text[uk] == '_') {
-            while ((isalnum(text[uk]) || text[uk] == '_') && i < maxLex - 1) 
+        if (isalpha(text[uk]) || text[uk] == '_')
+        {
+            while (uk < text.size() && (isalnum(text[uk]) || text[uk] == '_') && i < maxLex - 1)
             {
                 lex[i++] = text[uk++];
             }
             lex[i] = '\0';
-            if (i == maxLex - 1 && (isalnum(text[uk]) || text[uk] == '_')) 
+
+            if (i == maxLex - 1 && (uk < text.size() && (isalnum(text[uk]) || text[uk] == '_')))
             {
-                while (isalnum(text[uk]) || text[uk] == '_') 
+                while (uk < text.size() && (isalnum(text[uk]) || text[uk] == '_'))
                 {
                     uk++;
                 }
@@ -160,9 +166,9 @@ int Scaner::UseScaner(type_lex lex)
             }
 
             // Проверяем, является ли идентификатор ключевым словом
-            for (int j = 0; j < maxKeyword; j++) 
+            for (int j = 0; j < maxKeyword; j++)
             {
-                if (strcmp(lex, keyword[j]) == 0) 
+                if (strcmp(lex, keyword[j]) == 0)
                 {
                     return indexKeyword[j];
                 }
@@ -171,7 +177,7 @@ int Scaner::UseScaner(type_lex lex)
         }
 
         // Обработка специальных символов
-        switch (text[uk]) 
+        switch (text[uk])
         {
         case ',':
             uk++; lex[i++] = ','; lex[i] = '\0'; return typeComma;
@@ -196,14 +202,14 @@ int Scaner::UseScaner(type_lex lex)
         case '=':
             uk++;
             lex[i++] = '=';
-            if (text[uk] == '=') 
+            if (uk < text.size() && text[uk] == '=')
             {
                 uk++;
                 lex[i++] = '=';
                 lex[i] = '\0';
                 return typeEq;
             }
-            else 
+            else
             {
                 lex[i] = '\0';
                 return typeEval;
@@ -211,14 +217,14 @@ int Scaner::UseScaner(type_lex lex)
         case '!':
             uk++;
             lex[i++] = '!';
-            if (text[uk] == '=') 
+            if (uk < text.size() && text[uk] == '=')
             {
                 uk++;
                 lex[i++] = '=';
                 lex[i] = '\0';
                 return typeUnEq;
             }
-            else 
+            else
             {
                 lex[i] = '\0';
                 PrintError("Неожидаемый символ: ", lex);
@@ -227,42 +233,43 @@ int Scaner::UseScaner(type_lex lex)
         case '>':
             uk++;
             lex[i++] = '>';
-            if (text[uk] == '=') 
+            if (uk < text.size() && text[uk] == '=')
             {
                 uk++;
                 lex[i++] = '=';
                 lex[i] = '\0';
                 return typeMoreOrEq;
             }
-            else if (text[uk] == '>') 
+            else if (uk < text.size() && text[uk] == '>')
             {
                 uk++;
                 lex[i++] = '>';
                 lex[i] = '\0';
                 return typeBitwiseRight;
             }
-            else {
+            else
+            {
                 lex[i] = '\0';
                 return typeMore;
             }
         case '<':
             uk++;
             lex[i++] = '<';
-            if (text[uk] == '=') 
+            if (uk < text.size() && text[uk] == '=')
             {
                 uk++;
                 lex[i++] = '=';
                 lex[i] = '\0';
                 return typeLessOrEq;
             }
-            else if (text[uk] == '<') 
+            else if (uk < text.size() && text[uk] == '<')
             {
                 uk++;
                 lex[i++] = '<';
                 lex[i] = '\0';
                 return typeBitwiseLeft;
             }
-            else 
+            else
             {
                 lex[i] = '\0';
                 return typeLess;
@@ -276,30 +283,26 @@ int Scaner::UseScaner(type_lex lex)
     }
 }
 
-
-void Scaner::GetData(const char* filename)
+void Scaner::GetData(const std::string& filename)
 {
-	std::ifstream file(filename);
-	if (file.is_open())
-	{
-		std::stringstream buffer;
-		buffer << file.rdbuf();
+    std::ifstream file(filename);
+    if (file.is_open())
+    {
+        std::stringstream buffer;
+        buffer << file.rdbuf();
+        text = buffer.str(); // Сохраняем текст из файла
 
-		strncpy(text, buffer.str().c_str(), maxText - 1);
-		text[maxText - 1] = '\0';
-
-		std::cout << text << std::endl;
-		std::cout << std::endl << "Результат работы сканера:" << std::endl;
-	}
-	else
-	{
-		PrintError("Ошибка открытия файла.", filename);
-		return;
-	}
+        std::cout << "Текст программы:" << std::endl << text << std::endl;
+        std::cout << std::endl << "Результат работы сканера:" << std::endl;
+    }
+    else
+    {
+        PrintError("Ошибка открытия файла.", filename);
+    }
 }
 
-Scaner::Scaner(const char* filename)
+Scaner::Scaner(const std::string& filename)
 {
-	GetData(filename);
-	PutUK(0);
+    GetData(filename);
+    PutUK(0);
 }

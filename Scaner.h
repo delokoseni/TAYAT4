@@ -1,20 +1,21 @@
 #pragma once
 #include "Defines.h"
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
 class Scaner
 {
-
 private:
-	type_mod text; // Исходный текст
-	int uk;		   // Указатель текущей позиции в исходном тексте
+    std::string text; // Исходный текст
+    size_t uk;        // Указатель текущей позиции в исходном тексте
 
 public:
-	void PutUK(int uk);				// Установить указатель текущей позиции в исходном тексте
-	int GetUK();					// Получить указатель текущей позиции в исходном тексте
-	void PrintError(const char* error, const char* text);	// Вывод ошибки
-	int UseScaner(type_lex lex);							// Логика работы сканера
-	void GetData(const char* filename);						// Получение информации из файла
-	Scaner(const char* filename);
-
+    void PutUK(size_t uk);                // Установить указатель текущей позиции в исходном тексте
+    size_t GetUK();                       // Получить указатель текущей позиции в исходном тексте
+    void PrintError(const std::string& error, const std::string& text); // Вывод ошибки
+    int UseScaner(type_lex lex);          // Логика работы сканера
+    void GetData(const std::string& filename); // Получение информации из файла
+    Scaner(const std::string& filename);
 };
-

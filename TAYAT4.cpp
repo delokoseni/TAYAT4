@@ -1,10 +1,8 @@
-﻿#include <iostream>
+﻿#include "Scaner.h"
+#include <iostream>
 #include <iomanip>
 #include <windows.h>
 #include <fstream>
-#include <sstream>
-
-#include "Scaner.h"
 
 int main()
 {
