@@ -1,25 +1,23 @@
 int main()
 {
-	int var = 0;
-	long varhex = 123;
-	float b = .666666666666;
+	int a = 0;	// Комментарий
+	long b = 100;
+	float b = .6666666;
 	float b1 = 6.6;
 	float b2 = 6.;
-	if (var)
+	;;;;;;
+	if (b)
 	{
 		function();
-		;;;
 	}
 	else
-		var = 5;
-		;;;
+		a = 50;
 	return 0;
 }
 
-int function()
+short function()
 {
 	short a1 = 1;
-	// explaining division!
 	{
 	}
 	return a1;
