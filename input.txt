@@ -1,1 +1,23 @@
-aeeeeeeeeeeeeeeeeeeeeeeeeeeDDDDDDDDDDDDDDDDDDD1
+int main()
+{
+	int a = 0;	// Комментарий
+	long b = 100;
+	float b = .6666666;
+	float b1 = 6.6;
+	float b2 = 6.;
+	;;;;;;
+	.........
+	Float!;
+	dddddddd
+	999999999999999999999999999999
+	{}
+	()
+	[]
+	if (b)
+	{
+		function();
+	}
+	else
+		a = 50;
+	return 0;
+}
