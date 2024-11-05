@@ -10,7 +10,7 @@ private:
 	Scaner* scaner;
 	void description();                  // Описание
 	void data();                         // Данные
-	void function(int type);             // Функция
+	void function();             // Функция
 	void type();                         // Тип
 	void list();                         // Список
 	void variable();                     // Переменная

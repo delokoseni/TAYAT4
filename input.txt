@@ -4,7 +4,7 @@ int main()
 	float b2 = 6.1;
 	float f = b2 << b1;
 	float f2 = b1 >> b2;
-	short c;
+	short c; // Комментарий
 	function();
 	while(a != 0);
 	while(a > 0)

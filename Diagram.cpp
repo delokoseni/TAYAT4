@@ -42,7 +42,7 @@ void Diagram::description() {
 		return;
 	}
 	if ((type == typeInt || type == typeShort || type == typeLong || type == typeFloat) && simbol == typeLeftBracket) {
-		function(type);
+		function();
 		return;
 	}
 	type = scan(lex);
@@ -92,7 +92,7 @@ void Diagram::data() {
 		scaner->PrintError("Expected ; got", lex);
 }
 
-void Diagram::function(int typefromdescription) {
+void Diagram::function() {
 	type_lex lex;
 	int type = scan(lex);
 	if (type != typeInt && type != typeShort && type != typeLong && type != typeFloat)
@@ -243,6 +243,7 @@ void Diagram::operator_() {
 		function_call();
 		return;
 	}
+
 	if (type == typeId && type2 == typeEval) {
 		assignment();
 		type = scan(lex);
