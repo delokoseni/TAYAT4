@@ -29,13 +29,8 @@ private:
 	int scan(type_lex lex);
 	void element();
 	void return_statement();
+	void cycle();
 public:
-	//Tree* root;
-	Diagram(Scaner* scaner) 
-	{
-		this->scaner = scaner;
-		//this->root = new Tree(scaner);
-		//this->root->set_current(this->root);
-	}
+	Diagram(Scaner* scaner);
 	void program();						// Программа
 };

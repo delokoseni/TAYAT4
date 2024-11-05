@@ -1,5 +1,10 @@
 #include "Diagram.h"
 
+Diagram::Diagram(Scaner* scaner)
+{
+	this->scaner = scaner;
+}
+
 int Diagram::look_forward(int pos) {
 	type_lex lex;
 	int saved_pointer = scaner->GetUK();
@@ -64,7 +69,6 @@ void Diagram::element() {
 	type_lex lex;
 	int type;
 	type = look_forward(1);
-	//int type2 = look_forward(2);
 	if (type == typeId) {
 		variable();
 		return;
@@ -96,15 +100,6 @@ void Diagram::function(int typefromdescription) {
 	type = scan(lex);
 	if (type != typeId && type != typeMain)
 		scaner->PrintError("Expected identificator got", lex);
-	/*Tree* t = NULL;
-	if (type == typeInt)
-		t = root->semantic_include(lex, OBJECT_FUNCTION, TYPE_INT);
-	if (type == typeLong)
-		t = root->semantic_include(lex, OBJECT_FUNCTION, TYPE_LONG);
-	if (type == typeShort)
-		t = root->semantic_include(lex, OBJECT_FUNCTION, TYPE_SHORT);
-	if (type == typeFloat)
-		t = root->semantic_include(lex, OBJECT_FUNCTION, TYPE_FLOAT);*/
 
 	type = scan(lex);
 	if (type != typeLeftBracket)
@@ -123,8 +118,6 @@ void Diagram::function(int typefromdescription) {
 	type = scan(lex);
 	if (type != typeRightBrace)
 		scaner->PrintError("Expected } got", lex);
-
-	//root->set_current(t);
 }
 
 void Diagram::type() {
@@ -133,17 +126,6 @@ void Diagram::type() {
 	type = scan(lex);
 	if (type != typeInt && type != typeShort && type != typeLong && type != typeFloat)
 		scaner->PrintError("Expected type (int, short, long, float) got", lex);
-	// set last type for semantic analyzer
-	/*if (type == typeInt)
-		last_type_data = TYPE_INT;
-	else if (type == typeShort)
-		last_type_data = TYPE_SHORT;
-	else if (type == typeLong)
-		last_type_data = TYPE_LONG;
-	else if (type == typeFloat)
-		last_type_data = TYPE_FLOAT;
-	else
-		last_type_data = TYPE_UNKNOWN;*/
 }
 
 void Diagram::variable() {
@@ -159,13 +141,11 @@ void Diagram::variable() {
 
 	int pointer = scaner->GetUK();
 	type = scan(lex);
-	//Tree* t = root->semantic_include(lex, OBJECT_VARIABLE, last_type_data);
 	scaner->PutUK(pointer);
 
 	type = look_forward(2);
 	if (type == typeEval) {
 		assignment();
-		//root->semantic_set_init(t, 1);
 		return;
 	}
 	type = scan(lex);
@@ -179,8 +159,6 @@ void Diagram::assignment() {
 	if (type != typeId) {
 		scaner->PrintError("Expected identificator got", lex);
 	}
-
-	//Tree* t = root->semantic_get_type(lex, OBJECT_VARIABLE);
 
 	type = scan(lex);
 	if (type != typeEval)
@@ -210,15 +188,12 @@ void Diagram::composite_operator() {
 	if (type != typeLeftBrace)
 		scaner->PrintError("Expected { got", lex);
 
-	//Tree* t = root->semantic_include(lex, OBJECT_UNKNOWN, TYPE_UNKNOWN);
-
 	operators_and_descriptions();
 
 	type = scan(lex);
 	if (type != typeRightBrace)
 		scaner->PrintError("Expected } got", lex);
 
-	//root->set_current(t);
 }
 
 void Diagram::operators_and_descriptions() {
@@ -235,7 +210,7 @@ void Diagram::operators_and_descriptions() {
 
 	}
 }
-//Переписать
+
 void Diagram::operator_() {
 	type_lex lex;
 	int type;
@@ -254,6 +229,12 @@ void Diagram::operator_() {
 
 	if (type == typeLeftBrace) {
 		composite_operator();
+		return;
+	}
+
+	if (type == typeWhile)
+	{
+		cycle();
 		return;
 	}
 
@@ -291,6 +272,31 @@ void Diagram::return_statement() {
 	}
 }
 
+void Diagram::cycle()
+{
+	type_lex lex;
+	int type;
+
+	type = scan(lex);
+	if (type != typeWhile) {
+		scaner->PrintError("Expected while got", lex);
+	}
+
+	type = scan(lex);
+	if (type != typeLeftBracket) {
+		scaner->PrintError("Expected ( got", lex);
+	}
+
+	expression();
+
+	type = scan(lex);
+	if (type != typeRightBracket) {
+		scaner->PrintError("Expected ) got", lex);
+	}
+
+	operator_();
+}
+
 void Diagram::function_call() {
 	type_lex lex;
 	int type;
@@ -298,8 +304,6 @@ void Diagram::function_call() {
 	type = scan(lex);
 	if (type != typeId)
 		scaner->PrintError("Expected identificator got", lex);
-
-	//Tree* t = root->semantic_get_type(lex, OBJECT_FUNCTION);
 
 	type = scan(lex);
 	if (type != typeLeftBracket)
@@ -374,9 +378,6 @@ void Diagram::elementary_expression() {
 	if (type == typeId) {
 		type = scan(lex);
 		int type = look_forward(1);
-		/*Tree* t = root->semantic_get_type(lex, OBJECT_VARIABLE);
-		if (t->get_node()->init != 1)
-			scaner->PrintError("Variable not initialized", lex);*/
 		return;
 	}
 	else if (type == typeShort || type == typeFloat || type == typeInt || type == typeLong) {
