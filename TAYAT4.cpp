@@ -9,7 +9,6 @@ int main()
 {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
-
     Scaner* scaner;
     scaner = new Scaner("input.txt");
     Diagram* diagram = new Diagram(scaner);

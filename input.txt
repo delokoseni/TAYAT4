@@ -1,9 +1,9 @@
 int main()
 {
-	int a = 0;	// Комментарий
-	long b = 100;
 	float b1 = 6.6;
-	float b2 = 6.;
+	float b2 = 6.1;
+	float f = b2 << b1;
+	float f2 = b1 >> b2;
 	short c;
 	function();
 	while(a != 0);
@@ -14,10 +14,18 @@ int main()
 		a = a + 1;
 		a = a + 2;
 	}
+	float fun()
+	{
+		return 7.6;
+	}
 	return 0;
 }
 int function()
 {
 	int a = 7;
 	return a;
+	float func()
+	{
+		return 7.6;
+	}
 }

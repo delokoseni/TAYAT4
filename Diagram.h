@@ -21,6 +21,7 @@ private:
 	void operator_();                    // Оператор
 	void function_call();                // Вызов функции
 	void comparison();                   // Сравнение
+	void bitwiseshift();				 // Побитовый сдвиг
 	void addendum();                     // Добавочное
 	void multiplier();                   // Умножитель
 	void unary_operation();              // Унарная операция

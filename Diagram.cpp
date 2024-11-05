@@ -321,9 +321,24 @@ void Diagram::function_call() {
 void Diagram::comparison() {
 	type_lex lex;
 	int type;
-	addendum();
+	bitwiseshift();
 	type = look_forward(1);
 	while (type == typeLess || type == typeLessOrEq || type == typeMore || type == typeMoreOrEq) {
+		type = scan(lex);
+		bitwiseshift();
+		type = look_forward(1);
+	}
+}
+
+void Diagram::bitwiseshift()
+{
+	type_lex lex;
+	int type;
+
+	addendum();
+
+	type = look_forward(1);
+	while (type == typeBitwiseRight || type == typeBitwiseLeft) {
 		type = scan(lex);
 		addendum();
 		type = look_forward(1);
