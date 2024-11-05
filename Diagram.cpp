@@ -91,13 +91,13 @@ void Diagram::data() {
 void Diagram::function(int typefromdescription) {
 	type_lex lex;
 	int type = scan(lex);
-	if(type != typeInt && type != typeShort && type != typeLong && type != typeFloat)
+	if (type != typeInt && type != typeShort && type != typeLong && type != typeFloat)
 		scaner->PrintError("Expected type got", lex);
 	type = scan(lex);
 	if (type != typeId && type != typeMain)
 		scaner->PrintError("Expected identificator got", lex);
 	Tree* t = NULL;
-	if(type == typeInt)
+	if (type == typeInt)
 		t = root->semantic_include(lex, OBJECT_FUNCTION, TYPE_INT);
 	if (type == typeLong)
 		t = root->semantic_include(lex, OBJECT_FUNCTION, TYPE_LONG);
@@ -227,7 +227,7 @@ void Diagram::operators_and_descriptions() {
 
 	type = look_forward(1);
 	while (type != typeRightBrace) {
-		if (type == typeInt || type == typeShort || type == typeLong || typeFloat) {
+		if (type == typeInt || type == typeShort || type == typeLong || type == typeFloat) {
 			data();
 		}
 		else operator_();
@@ -235,7 +235,7 @@ void Diagram::operators_and_descriptions() {
 
 	}
 }
-
+//Переписать
 void Diagram::operator_() {
 	type_lex lex;
 	int type;
