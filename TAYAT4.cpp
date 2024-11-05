@@ -1,4 +1,5 @@
 ﻿#include "Scaner.h"
+#include "Diagram.h"
 #include <iostream>
 #include <iomanip>
 #include <windows.h>
@@ -10,16 +11,18 @@ int main()
     SetConsoleOutputCP(1251);
 
     Scaner* scaner;
-    int type;
-    type_lex lex;
     scaner = new Scaner("input.txt");
+    Diagram* diagram = new Diagram(scaner);
 
-    do
-    {
-        type = scaner->UseScaner(lex);
-        std::cout << std::setw(16) << lex << "\tпринадлежит к типу №\t" << type << std::endl;
-    } while (type != typeEnd);
+    diagram->program();
 
-    delete scaner;
+    int type; type_lex lex;
+    type = scaner->UseScaner(lex);
+    if (type == typeEnd)
+        std::cout << "OK" << std::endl;
+    else
+        std::cout << "ERROR" << std::endl;
+    diagram->root->print();
+
     return 0;
 }
