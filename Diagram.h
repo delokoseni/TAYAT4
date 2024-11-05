@@ -1,12 +1,12 @@
 ﻿#pragma once
 
-#include "Tree.h"
+#include "Scaner.h"
 
 class Diagram
 {
 private:
-	type_data last_type_data;
-	type_object last_type_object;
+	//type_data last_type_data;
+	//type_object last_type_object;
 	Scaner* scaner;
 	void description();                  // Описание
 	void data();                         // Данные
@@ -28,13 +28,14 @@ private:
 	int look_forward(int pointer);
 	int scan(type_lex lex);
 	void element();
+	void return_statement();
 public:
-	Tree* root;
+	//Tree* root;
 	Diagram(Scaner* scaner) 
 	{
 		this->scaner = scaner;
-		this->root = new Tree(scaner);
-		this->root->set_current(this->root);
+		//this->root = new Tree(scaner);
+		//this->root->set_current(this->root);
 	}
 	void program();						// Программа
 };

@@ -7,6 +7,10 @@ int main()
 	short c;
 	function();
 	a = 50;
-	//return 0;
+	return 0;
 }
-
+int function()
+{
+	int a = 7;
+	return a;
+}

@@ -96,7 +96,7 @@ void Diagram::function(int typefromdescription) {
 	type = scan(lex);
 	if (type != typeId && type != typeMain)
 		scaner->PrintError("Expected identificator got", lex);
-	Tree* t = NULL;
+	/*Tree* t = NULL;
 	if (type == typeInt)
 		t = root->semantic_include(lex, OBJECT_FUNCTION, TYPE_INT);
 	if (type == typeLong)
@@ -104,7 +104,7 @@ void Diagram::function(int typefromdescription) {
 	if (type == typeShort)
 		t = root->semantic_include(lex, OBJECT_FUNCTION, TYPE_SHORT);
 	if (type == typeFloat)
-		t = root->semantic_include(lex, OBJECT_FUNCTION, TYPE_FLOAT);
+		t = root->semantic_include(lex, OBJECT_FUNCTION, TYPE_FLOAT);*/
 
 	type = scan(lex);
 	if (type != typeLeftBracket)
@@ -124,7 +124,7 @@ void Diagram::function(int typefromdescription) {
 	if (type != typeRightBrace)
 		scaner->PrintError("Expected } got", lex);
 
-	root->set_current(t);
+	//root->set_current(t);
 }
 
 void Diagram::type() {
@@ -134,7 +134,7 @@ void Diagram::type() {
 	if (type != typeInt && type != typeShort && type != typeLong && type != typeFloat)
 		scaner->PrintError("Expected type (int, short, long, float) got", lex);
 	// set last type for semantic analyzer
-	if (type == typeInt)
+	/*if (type == typeInt)
 		last_type_data = TYPE_INT;
 	else if (type == typeShort)
 		last_type_data = TYPE_SHORT;
@@ -143,7 +143,7 @@ void Diagram::type() {
 	else if (type == typeFloat)
 		last_type_data = TYPE_FLOAT;
 	else
-		last_type_data = TYPE_UNKNOWN;
+		last_type_data = TYPE_UNKNOWN;*/
 }
 
 void Diagram::variable() {
@@ -159,13 +159,13 @@ void Diagram::variable() {
 
 	int pointer = scaner->GetUK();
 	type = scan(lex);
-	Tree* t = root->semantic_include(lex, OBJECT_VARIABLE, last_type_data);
+	//Tree* t = root->semantic_include(lex, OBJECT_VARIABLE, last_type_data);
 	scaner->PutUK(pointer);
 
 	type = look_forward(2);
 	if (type == typeEval) {
 		assignment();
-		root->semantic_set_init(t, 1);
+		//root->semantic_set_init(t, 1);
 		return;
 	}
 	type = scan(lex);
@@ -180,7 +180,7 @@ void Diagram::assignment() {
 		scaner->PrintError("Expected identificator got", lex);
 	}
 
-	Tree* t = root->semantic_get_type(lex, OBJECT_VARIABLE);
+	//Tree* t = root->semantic_get_type(lex, OBJECT_VARIABLE);
 
 	type = scan(lex);
 	if (type != typeEval)
@@ -210,7 +210,7 @@ void Diagram::composite_operator() {
 	if (type != typeLeftBrace)
 		scaner->PrintError("Expected { got", lex);
 
-	Tree* t = root->semantic_include(lex, OBJECT_UNKNOWN, TYPE_UNKNOWN);
+	//Tree* t = root->semantic_include(lex, OBJECT_UNKNOWN, TYPE_UNKNOWN);
 
 	operators_and_descriptions();
 
@@ -218,7 +218,7 @@ void Diagram::composite_operator() {
 	if (type != typeRightBrace)
 		scaner->PrintError("Expected } got", lex);
 
-	root->set_current(t);
+	//root->set_current(t);
 }
 
 void Diagram::operators_and_descriptions() {
@@ -241,6 +241,12 @@ void Diagram::operator_() {
 	int type;
 
 	type = look_forward(1);
+
+	if (type == typeReturn) {
+		return_statement();
+		return;
+	}
+
 	if (type == typeSemicolon) {
 		type = scan(lex);
 		return;
@@ -268,6 +274,23 @@ void Diagram::operator_() {
 	scaner->PrintError("Expected operator got", lex);
 }
 
+void Diagram::return_statement() {
+	type_lex lex;
+	int type;
+
+	type = scan(lex);
+	if (type != typeReturn) {
+		scaner->PrintError("Expected return got", lex);
+	}
+
+	expression();
+
+	type = scan(lex);
+	if (type != typeSemicolon) {
+		scaner->PrintError("Expected ; after return statement got", lex);
+	}
+}
+
 void Diagram::function_call() {
 	type_lex lex;
 	int type;
@@ -276,7 +299,7 @@ void Diagram::function_call() {
 	if (type != typeId)
 		scaner->PrintError("Expected identificator got", lex);
 
-	Tree* t = root->semantic_get_type(lex, OBJECT_FUNCTION);
+	//Tree* t = root->semantic_get_type(lex, OBJECT_FUNCTION);
 
 	type = scan(lex);
 	if (type != typeLeftBracket)
@@ -351,9 +374,9 @@ void Diagram::elementary_expression() {
 	if (type == typeId) {
 		type = scan(lex);
 		int type = look_forward(1);
-		Tree* t = root->semantic_get_type(lex, OBJECT_VARIABLE);
+		/*Tree* t = root->semantic_get_type(lex, OBJECT_VARIABLE);
 		if (t->get_node()->init != 1)
-			scaner->PrintError("Variable not initialized", lex);
+			scaner->PrintError("Variable not initialized", lex);*/
 		return;
 	}
 	else if (type == typeShort || type == typeFloat || type == typeInt || type == typeLong) {
