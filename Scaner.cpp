@@ -70,7 +70,6 @@ int Scaner::UseScaner(type_lex lex)
             uk++;
             if (uk < text.size() && text[uk] == '/')
             {
-                std::cout << "Строка комментария." << std::endl;
                 while (uk < text.size() && text[uk] != '\n')
                 {
                     uk++;

@@ -8,13 +8,15 @@ int main()
 	function();
 	while(a != 0);
 	while(a > 0)
+	{
 		a = 50;
+	}
 	while(a < 0)
 	{
 		a = a + 1;
 		a = a + 2;
 	}
-	float fun()
+	int fun()
 	{
 		return 7.6;
 	}
