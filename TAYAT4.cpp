@@ -12,7 +12,7 @@ int main()
     Scaner* scaner;
     scaner = new Scaner("input.txt");
     Diagram* diagram = new Diagram(scaner);
-
+ 
     diagram->program();
 
     int type; type_lex lex;

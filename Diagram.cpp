@@ -237,6 +237,13 @@ void Diagram::operator_() {
 		return;
 	}
 
+	if (type == typeId) {
+		expression();
+		return;
+	}
+	
+
+
 	type = scan(lex);
 	scaner->PrintError("Expected operator got", lex);
 }

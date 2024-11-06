@@ -7,6 +7,8 @@ int main()
 	short c; // Комментарий
 	function();
 	b1 + b2;
+	b1 << b2;
+	1 - 3;
 	b1 = b2;
 	while(a != 0);
 	while(a > 0)
