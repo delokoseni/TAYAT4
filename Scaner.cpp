@@ -35,14 +35,54 @@ size_t Scaner::GetUK()
     return uk;
 }
 
-void Scaner::PrintError(const std::string& error, const std::string& text = "") 
+void Scaner::GetData(const std::string& filename)
 {
-    std::cout << error;
-    if (!text.empty()) 
+    std::ifstream file(filename);
+    if (file.is_open())
     {
-        std::cout << " " << text;
+        std::stringstream buffer;
+        buffer << file.rdbuf();
+        text = buffer.str(); // Сохраняем текст из файла
+        text += '\n';
+
+        // Определяем позиции перевода строки
+        for (size_t i = 0; i < text.size(); ++i) {
+            if (text[i] == '\n') {
+                lineBreakPositions.push_back(i);
+            }
+        }
+
+        std::cout << "Текст программы:" << std::endl << text << std::endl;
+        std::cout << std::endl << "Результат работы сканера:" << std::endl;
+    }
+    else
+    {
+        PrintError("Ошибка открытия файла.", filename);
+    }
+}
+
+void Scaner::PrintError(const std::string& error, const std::string& lexeme)
+{
+    int line = 1;
+    int pos = uk;
+
+    for (size_t i = 0; i < lineBreakPositions.size(); ++i) {
+        if (lineBreakPositions[i] < uk) {
+            line++;
+        }
+        else {
+            pos = uk - (i == 0 ? 0 : lineBreakPositions[i - 1] + 1);
+            break;
+        }
+    }
+
+    std::cout << "Ошибка: " << error << " на строке " << line << ", позиция " << pos;
+    if (!lexeme.empty())
+    {
+        std::cout << ", найдено: " << lexeme;
     }
     std::cout << std::endl;
+
 }
 
 int Scaner::UseScaner(type_lex lex)
@@ -285,7 +325,7 @@ int Scaner::UseScaner(type_lex lex)
     }
 }
 
-void Scaner::GetData(const std::string& filename)
+/*void Scaner::GetData(const std::string& filename)
 {
     std::ifstream file(filename);
     if (file.is_open())
@@ -302,7 +342,7 @@ void Scaner::GetData(const std::string& filename)
     {
         PrintError("Ошибка открытия файла.", filename);
     }
-}
+}*/
 
 Scaner::Scaner(const std::string& filename)
 {

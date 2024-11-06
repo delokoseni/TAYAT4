@@ -378,7 +378,6 @@ void Diagram::elementary_expression() {
 	int type = look_forward(1);
 	if (type == typeId) {
 		type = scan(lex);
-		int type = look_forward(1);
 		return;
 	}
 	else if (type == typeShort || type == typeFloat || type == typeInt || type == typeLong) {

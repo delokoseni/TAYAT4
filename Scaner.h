@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <vector>
 
 class Scaner
 {
@@ -18,4 +19,5 @@ public:
     int UseScaner(type_lex lex);          // Логика работы сканера
     void GetData(const std::string& filename); // Получение информации из файла
     Scaner(const std::string& filename);
+    std::vector<int> lineBreakPositions;
 };
