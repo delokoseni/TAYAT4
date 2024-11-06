@@ -28,7 +28,6 @@ private:
 	void elementary_expression();        // Элементарное выражение
 	int look_forward(int pointer);
 	int scan(type_lex lex);
-	void element();
 	void return_statement();
 	void cycle();
 public:

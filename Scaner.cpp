@@ -26,6 +26,7 @@ void Scaner::PutUK(size_t uk)
     else if(text.size() != 0)
     {
         std::cerr << "Ошибка: индекс выходит за пределы размера текста." << std::endl;
+        exit(1);
     }
 }
 
@@ -292,6 +293,7 @@ void Scaner::GetData(const std::string& filename)
         std::stringstream buffer;
         buffer << file.rdbuf();
         text = buffer.str(); // Сохраняем текст из файла
+        text += '\n';
 
         std::cout << "Текст программы:" << std::endl << text << std::endl;
         std::cout << std::endl << "Результат работы сканера:" << std::endl;

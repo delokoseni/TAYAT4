@@ -53,29 +53,14 @@ void Diagram::list() {
 	type_lex lex;
 	int type, pointer;
 
-	element();
+	variable();
 
 	type = look_forward(1);
 
 	while (type == typeComma) {
 		type = scan(lex);
-		element();
-		type = look_forward(1);
-	}
-}
-
-void Diagram::element() {
-
-	type_lex lex;
-	int type;
-	type = look_forward(1);
-	if (type == typeId) {
 		variable();
-		return;
-	}
-	else {
-		type = scaner->UseScaner(lex);
-		scaner->PrintError("Expected element got", lex);
+		type = look_forward(1);
 	}
 }
 

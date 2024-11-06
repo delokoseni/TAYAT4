@@ -1,11 +1,13 @@
 int main()
 {
-	float b1 = 6.6;
+	float b1 = 6.6, key, key1;
 	float b2 = 6.1;
-	float f = b2 << b1;
+	float f = -(b2 << b1);
 	float f2 = b1 >> b2;
 	short c; // Комментарий
 	function();
+	1 + 2;
+	b1 = b2;
 	while(a != 0);
 	while(a > 0)
 	{
@@ -23,5 +25,5 @@ int main()
 int function()
 {
 	int a = 7;
-	return a;
+	return 1 + 7;
 }
