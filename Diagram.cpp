@@ -5,7 +5,8 @@ Diagram::Diagram(Scaner* scaner)
 	this->scaner = scaner;
 }
 
-int Diagram::look_forward(int pos) {
+int Diagram::LookForward(int pos) 
+{
 	type_lex lex;
 	int saved_pointer = scaner->GetUK();
 	int next_type;
@@ -15,392 +16,447 @@ int Diagram::look_forward(int pos) {
 	return next_type;
 }
 
-int Diagram::scan(type_lex lex) {
+int Diagram::Scan(type_lex lex) 
+{
 	return scaner->UseScaner(lex);
 }
 
-void Diagram::program() {
+void Diagram::Program() 
+{
 	type_lex lex;
 	int type;
-	type = look_forward(1);
-	while (type == typeInt || type == typeShort || type == typeLong || type == typeFloat) {
-		description();
-		type = look_forward(1);
+	type = LookForward(1);
+	while (type == typeInt || type == typeShort || type == typeLong || type == typeFloat) 
+	{
+		Description();
+		type = LookForward(1);
 	}
-	if (type != typeEnd) {
-		type = scan(lex);
-		scaner->PrintError("Expected end got", lex);
+	if (type != typeEnd) 
+	{
+		type = Scan(lex);
+		scaner->PrintError("ожидался конец, ", lex);
 	}
 }
 
-void Diagram::description() {
+void Diagram::Description() 
+{
 	type_lex lex;
-	int type = look_forward(1);
-	int simbol = look_forward(3);
-	if ((type == typeInt || type == typeShort || type == typeLong || type == typeFloat) && simbol != typeLeftBracket) {
-		data();
+	int type = LookForward(1);
+	int simbol = LookForward(3);
+	if ((type == typeInt || type == typeShort || type == typeLong || type == typeFloat) && simbol != typeLeftBracket) 
+	{
+		Data();
 		return;
 	}
-	if ((type == typeInt || type == typeShort || type == typeLong || type == typeFloat) && simbol == typeLeftBracket) {
-		function();
+	if ((type == typeInt || type == typeShort || type == typeLong || type == typeFloat) && simbol == typeLeftBracket) 
+	{
+		Function();
 		return;
 	}
-	type = scan(lex);
-	scaner->PrintError("Expected type got", lex);
+	type = Scan(lex);
+	scaner->PrintError("ожидался тип (int, short, long, float), ", lex);
 }
 
-void Diagram::list() {
+void Diagram::List() 
+{
 	type_lex lex;
 	int type, pointer;
-
-	variable();
-
-	type = look_forward(1);
-
-	while (type == typeComma) {
-		type = scan(lex);
-		variable();
-		type = look_forward(1);
+	Variable();
+	type = LookForward(1);
+	while (type == typeComma) 
+	{
+		type = Scan(lex);
+		Variable();
+		type = LookForward(1);
 	}
 }
 
-void Diagram::data() {
+void Diagram::Data() 
+{
 	type_lex lex;
 	int type_;
-
-	type();
-
-	list();
-
-	type_ = scan(lex);
+	Type();
+	List();
+	type_ = Scan(lex);
 	if (type_ != typeSemicolon)
-		scaner->PrintError("Expected ; got", lex);
+	{
+		scaner->PrintError("ожидалась ;, ", lex);
+	}
 }
 
-void Diagram::function() {
+void Diagram::Function() 
+{
 	type_lex lex;
-	int type = scan(lex);
+	int type = Scan(lex);
 	if (type != typeInt && type != typeShort && type != typeLong && type != typeFloat)
-		scaner->PrintError("Expected type got", lex);
-	type = scan(lex);
+	{
+		scaner->PrintError("ожидался тип (int, short, long, float), ", lex);
+	}
+
+	type = Scan(lex);
 	if (type != typeId && type != typeMain)
-		scaner->PrintError("Expected identificator got", lex);
+	{
+		scaner->PrintError("ожидался идентификатор, ", lex);
+	}
 
-	type = scan(lex);
+	type = Scan(lex);
 	if (type != typeLeftBracket)
-		scaner->PrintError("Expected ( got", lex);
+	{
+		scaner->PrintError("ожидалась (, ", lex);
+	}
 
-	type = scan(lex);
+	type = Scan(lex);
 	if (type != typeRightBracket)
-		scaner->PrintError("Expected ) got", lex);
+	{
+		scaner->PrintError("ожидалась ), ", lex);
+	}
 
-	type = scan(lex);
+	type = Scan(lex);
 	if (type != typeLeftBrace)
-		scaner->PrintError("Expected { got", lex);
+	{
+		scaner->PrintError("ожидалась {, ", lex);
+	}
 
-	operators_and_descriptions();
+	OperatorsAndDescriptions();
 
-	type = scan(lex);
+	type = Scan(lex);
 	if (type != typeRightBrace)
-		scaner->PrintError("Expected } got", lex);
+	{
+		scaner->PrintError("ожилалась }, ", lex);
+	}
 }
 
-void Diagram::type() {
+void Diagram::Type() 
+{
 	type_lex lex;
 	int type;
-	type = scan(lex);
+	type = Scan(lex);
 	if (type != typeInt && type != typeShort && type != typeLong && type != typeFloat)
-		scaner->PrintError("Expected type (int, short, long, float) got", lex);
+	{
+		scaner->PrintError("ожидался тип (int, short, long, float), ", lex);
+	}
 }
 
-void Diagram::variable() {
+void Diagram::Variable() 
+{
 	type_lex lex;
-	int type;
+	int type = LookForward(1);
 
-	type = look_forward(1);
-
-	if (type != typeId) {
-		type = scan(lex);
-		scaner->PrintError("Expected identificator got", lex);
+	if (type != typeId) 
+	{
+		type = Scan(lex);
+		scaner->PrintError("ожидался идентификатор, ", lex);
 	}
 
 	int pointer = scaner->GetUK();
-	type = scan(lex);
+	type = Scan(lex);
 	scaner->PutUK(pointer);
 
-	type = look_forward(2);
-	if (type == typeEval) {
-		assignment();
+	type = LookForward(2);
+	if (type == typeEval) 
+	{
+		Assignment();
 		return;
 	}
-	type = scan(lex);
+	type = Scan(lex);
 }
 
-void Diagram::assignment() {
+void Diagram::Assignment() 
+{
 	type_lex lex;
-	int type;
+	int type = Scan(lex);
 
-	type = scan(lex);
-	if (type != typeId) {
-		scaner->PrintError("Expected identificator got", lex);
+	if (type != typeId) 
+	{
+		scaner->PrintError("ожидался идентификатор, ", lex);
 	}
 
-	type = scan(lex);
+	type = Scan(lex);
 	if (type != typeEval)
-		scaner->PrintError("Expected = got", lex);
+	{
+		scaner->PrintError("ожидалось =, ", lex);
+	}
 
-	expression();
+	Expression();
 }
 
-void Diagram::expression() {
+void Diagram::Expression() 
+{
 	type_lex lex;
 	int type;
 
-	comparison();
-	type = look_forward(1);
-	while (type == typeEq || type == typeUnEq) {
-		type = scan(lex);
-		comparison();
-		type = look_forward(1);
+	Comparison();
+	type = LookForward(1);
+	while (type == typeEq || type == typeUnEq) 
+	{
+		type = Scan(lex);
+		Comparison();
+		type = LookForward(1);
 	}
 }
 
-void Diagram::composite_operator() {
+void Diagram::CompositeOperator() 
+{
 	type_lex lex;
-	int type;
+	int type = Scan(lex);
 
-	type = scan(lex);
 	if (type != typeLeftBrace)
-		scaner->PrintError("Expected { got", lex);
+	{
+		scaner->PrintError("ожидалась {, ", lex);
+	}
 
-	operators_and_descriptions();
+	OperatorsAndDescriptions();
 
-	type = scan(lex);
+	type = Scan(lex);
 	if (type != typeRightBrace)
-		scaner->PrintError("Expected } got", lex);
-
+	{
+		scaner->PrintError("ожидалась }, ", lex);
+	}
 }
 
-void Diagram::operators_and_descriptions() {
+void Diagram::OperatorsAndDescriptions() 
+{
 	type_lex lex;
-	int type;
+	int type = LookForward(1);
 
-	type = look_forward(1);
-	while (type != typeRightBrace) {
-		if (type == typeInt || type == typeShort || type == typeLong || type == typeFloat) {
-			data();
+	while (type != typeRightBrace) 
+	{
+		if (type == typeInt || type == typeShort || type == typeLong || type == typeFloat) 
+		{
+			Data();
 		}
-		else operator_();
-		type = look_forward(1);
-
+		else Operator();
+		type = LookForward(1);
 	}
 }
 
-void Diagram::operator_() {
+void Diagram::Operator() 
+{
 	type_lex lex;
-	int type;
+	int type = LookForward(1);
 
-	type = look_forward(1);
-
-	if (type == typeReturn) {
-		return_statement();
+	if (type == typeReturn) 
+	{
+		ReturnStatement();
 		return;
 	}
 
-	if (type == typeSemicolon) {
-		type = scan(lex);
+	if (type == typeSemicolon) 
+	{
+		type = Scan(lex);
 		return;
 	}
 
-	if (type == typeLeftBrace) {
-		composite_operator();
+	if (type == typeLeftBrace) 
+	{
+		CompositeOperator();
 		return;
 	}
 
 	if (type == typeWhile)
 	{
-		cycle();
+		Cycle();
 		return;
 	}
 
-	int type2 = look_forward(2);
-	if (type == typeId && type2 == typeLeftBracket) {
-		function_call();
+	int type2 = LookForward(2);
+	if (type == typeId && type2 == typeLeftBracket) 
+	{
+		FunctionCall();
 		return;
 	}
 
-	if (type == typeId && type2 == typeEval) {
-		assignment();
-		type = scan(lex);
+	if (type == typeId && type2 == typeEval) 
+	{
+		Assignment();
+		type = Scan(lex);
 		if (type != typeSemicolon)
-			scaner->PrintError("Expected ; got", lex);
+			scaner->PrintError("ожидалась ;, ", lex);
 		return;
 	}
 
-	if (type == typeId) {
-		expression();
+	if (type == typeId) 
+	{
+		Expression();
 		return;
 	}
-	
 
-
-	type = scan(lex);
-	scaner->PrintError("Expected operator got", lex);
+	type = Scan(lex);
+	scaner->PrintError("ожидался оператор, ", lex);
 }
 
-void Diagram::return_statement() {
-	type_lex lex;
-	int type;
-
-	type = scan(lex);
-	if (type != typeReturn) {
-		scaner->PrintError("Expected return got", lex);
-	}
-
-	expression();
-
-	type = scan(lex);
-	if (type != typeSemicolon) {
-		scaner->PrintError("Expected ; after return statement got", lex);
-	}
-}
-
-void Diagram::cycle()
+void Diagram::ReturnStatement() 
 {
 	type_lex lex;
-	int type;
+	int type = Scan(lex);
 
-	type = scan(lex);
-	if (type != typeWhile) {
-		scaner->PrintError("Expected while got", lex);
+	if (type != typeReturn) 
+	{
+		scaner->PrintError("ожидалось return, ", lex);
 	}
 
-	type = scan(lex);
-	if (type != typeLeftBracket) {
-		scaner->PrintError("Expected ( got", lex);
+	Expression();
+
+	type = Scan(lex);
+	if (type != typeSemicolon) 
+	{
+		scaner->PrintError("ожидалась ; после return <выражение>, ", lex);
 	}
-
-	expression();
-
-	type = scan(lex);
-	if (type != typeRightBracket) {
-		scaner->PrintError("Expected ) got", lex);
-	}
-
-	operator_();
 }
 
-void Diagram::function_call() {
+void Diagram::Cycle()
+{
 	type_lex lex;
-	int type;
+	int type = Scan(lex);
 
-	type = scan(lex);
+	if (type != typeWhile) 
+	{
+		scaner->PrintError("ожидалось while, ", lex);
+	}
+
+	type = Scan(lex);
+	if (type != typeLeftBracket) 
+	{
+		scaner->PrintError("ожидалась (, ", lex);
+	}
+
+	Expression();
+
+	type = Scan(lex);
+	if (type != typeRightBracket) 
+	{
+		scaner->PrintError("ожидалась ), ", lex);
+	}
+
+	Operator();
+}
+
+void Diagram::FunctionCall() 
+{
+	type_lex lex;
+	int type = Scan(lex);
+
 	if (type != typeId)
-		scaner->PrintError("Expected identificator got", lex);
+	{
+		scaner->PrintError("ожидался идентификатор, ", lex);
+	}
 
-	type = scan(lex);
+	type = Scan(lex);
 	if (type != typeLeftBracket)
-		scaner->PrintError("Expected ( got", lex);
+	{
+		scaner->PrintError("ожидалась (, ", lex);
+	}
 
-	type = scan(lex);
+	type = Scan(lex);
 	if (type != typeRightBracket)
-		scaner->PrintError("Expected ) got", lex);
+	{
+		scaner->PrintError("ожидалась ), ", lex);
+	}
 
-	type = scan(lex);
+	type = Scan(lex);
 	if (type != typeSemicolon)
-		scaner->PrintError("Expected ; got", lex);	
-}
-
-void Diagram::comparison() {
-	type_lex lex;
-	int type;
-	bitwiseshift();
-	type = look_forward(1);
-	while (type == typeLess || type == typeLessOrEq || type == typeMore || type == typeMoreOrEq) {
-		type = scan(lex);
-		bitwiseshift();
-		type = look_forward(1);
+	{
+		scaner->PrintError("ожидалась ;, ", lex);
 	}
 }
 
-void Diagram::bitwiseshift()
+void Diagram::Comparison() 
+{
+	type_lex lex;
+	BitwiseShift();
+	int type = LookForward(1);
+	while (type == typeLess || type == typeLessOrEq || type == typeMore || type == typeMoreOrEq) 
+	{
+		type = Scan(lex);
+		BitwiseShift();
+		type = LookForward(1);
+	}
+}
+
+void Diagram::BitwiseShift()
 {
 	type_lex lex;
 	int type;
-
-	addendum();
-
-	type = look_forward(1);
-	while (type == typeBitwiseRight || type == typeBitwiseLeft) {
-		type = scan(lex);
-		addendum();
-		type = look_forward(1);
+	Summand();
+	type = LookForward(1);
+	while (type == typeBitwiseRight || type == typeBitwiseLeft) 
+	{
+		type = Scan(lex);
+		Summand();
+		type = LookForward(1);
 	}
 }
 
-void Diagram::addendum() {
+void Diagram::Summand() 
+{
 	type_lex lex;
 	int type;
-
-	multiplier();
-
-	type = look_forward(1);
-	while (type == typePlus || type == typeMinus) {
-		type = scan(lex);
-		multiplier();
-		type = look_forward(1);
+	Multiplier();
+	type = LookForward(1);
+	while (type == typePlus || type == typeMinus) 
+	{
+		type = Scan(lex);
+		Multiplier();
+		type = LookForward(1);
 	}
 }
 
-void Diagram::multiplier() {
+void Diagram::Multiplier() 
+{
 	type_lex lex;
 	int type;
-
-	unary_operation();
-
-	type = look_forward(1);
-	while (type == typeMul || type == typeDiv || type == typeMod) {
-		type = scan(lex);
-		unary_operation();
-		type = look_forward(1);
+	UnaryOperation();
+	type = LookForward(1);
+	while (type == typeMul || type == typeDiv || type == typeMod) 
+	{
+		type = Scan(lex);
+		UnaryOperation();
+		type = LookForward(1);
 	}
 }
 
-void Diagram::unary_operation() {
+void Diagram::UnaryOperation() 
+{
 	type_lex lex;
-	int type = look_forward(1);
+	int type = LookForward(1);
 
 	if (type == typePlus || type == typeMinus)
 	{
-		type = scan(lex);
-		elementary_expression();
+		type = Scan(lex);
+		ElementaryExpression();
 	}
 	else
-		elementary_expression();
+	{
+		ElementaryExpression();
+	}
 }
 
 
-void Diagram::elementary_expression() {
+void Diagram::ElementaryExpression() 
+{
 	type_lex lex;
-	int type = look_forward(1);
-	if (type == typeId) {
-		type = scan(lex);
+	int type = LookForward(1);
+	if (type == typeId) 
+	{
+		type = Scan(lex);
 		return;
 	}
-	else if (type == typeShort || type == typeFloat || type == typeInt || type == typeLong) {
-		type = scan(lex);
+	if (type == typeShort || type == typeFloat || type == typeInt || type == typeLong) 
+	{
+		type = Scan(lex);
 		return;
 	}
-	else if (type == typeLeftBracket) {
-		type = scan(lex);
-		expression();
-		type = scan(lex);
+	if (type == typeLeftBracket) 
+	{
+		type = Scan(lex);
+		Expression();
+		type = Scan(lex);
 		if (type != typeRightBracket)
-			scaner->PrintError("Expected ) got ", lex);
+		{
+			scaner->PrintError("ожидалась ), ", lex);
+		}
 		return;
 	}
-	else {
-		type = scan(lex);
-		scaner->PrintError("Expected expression got", lex);
-	}
+	type = Scan(lex);
+	scaner->PrintError("ожидалось выражение, ", lex);
 }

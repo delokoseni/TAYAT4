@@ -5,32 +5,31 @@
 class Diagram
 {
 private:
-	//type_data last_type_data;
-	//type_object last_type_object;
 	Scaner* scaner;
-	void description();                  // Описание
-	void data();                         // Данные
-	void function();             // Функция
-	void type();                         // Тип
-	void list();                         // Список
-	void variable();                     // Переменная
-	void assignment();                   // Присваивание
-	void expression();                   // Выражение
-	void composite_operator();           // Составной оператор
-	void operators_and_descriptions();   // Операторы и описания
-	void operator_();                    // Оператор
-	void function_call();                // Вызов функции
-	void comparison();                   // Сравнение
-	void bitwiseshift();				 // Побитовый сдвиг
-	void addendum();                     // Добавочное
-	void multiplier();                   // Умножитель
-	void unary_operation();              // Унарная операция
-	void elementary_expression();        // Элементарное выражение
-	int look_forward(int pointer);
-	int scan(type_lex lex);
-	void return_statement();
-	void cycle();
+	void Description();						// Описание
+	void Data();							// Данные
+	void Function();						// Функция
+	void Type();							// Тип
+	void List();							// Список
+	void Variable();						// Переменная
+	void Assignment();						// Присваивание
+	void Expression();						// Выражение
+	void CompositeOperator();				// Составной оператор
+	void OperatorsAndDescriptions();		// Операторы и описания
+	void Operator();						// Оператор
+	void FunctionCall();					// Вызов функции
+	void Comparison();						// Сравнение
+	void BitwiseShift();					// Побитовый сдвиг
+	void Summand();							// Слагаемое
+	void Multiplier();						// Множитель
+	void UnaryOperation();					// Унарная операция
+	void ElementaryExpression();			// Элементарное выражение
+	void Cycle();							// Цикл
+	void ReturnStatement();					// Оператор возврата (return)
+	int LookForward(int pointer);			
+	int Scan(type_lex lex);
+	
 public:
 	Diagram(Scaner* scaner);
-	void program();						// Программа
+	void Program();							// Программа
 };
