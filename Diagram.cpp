@@ -42,7 +42,6 @@ void Diagram::description() {
 		return;
 	}
 	if ((type == typeInt || type == typeShort || type == typeLong || type == typeFloat) && simbol == typeLeftBracket) {
-		std::cout << "Заходит" << std::endl;
 		function();
 		return;
 	}
@@ -90,7 +89,7 @@ void Diagram::data() {
 
 	type_ = scan(lex);
 	if (type_ != typeSemicolon)
-		scaner->PrintError("data Expected ; got", lex);
+		scaner->PrintError("Expected ; got", lex);
 }
 
 void Diagram::function() {
@@ -206,9 +205,9 @@ void Diagram::operators_and_descriptions() {
 		if (type == typeInt || type == typeShort || type == typeLong || type == typeFloat) {
 			data();
 		}
-		else 
-			operator_();
+		else operator_();
 		type = look_forward(1);
+
 	}
 }
 

@@ -16,18 +16,12 @@ int main()
 		a = a + 1;
 		a = a + 2;
 	}
-	int fun()
-	{
-		return 7.6;
-	}
+	;;;;;
+	{{{}}}
 	return 0;
 }
 int function()
 {
 	int a = 7;
 	return a;
-	float func()
-	{
-		return 7.6;
-	}
 }
