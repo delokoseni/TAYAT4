@@ -9,9 +9,11 @@ int main()
 {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
+
     Scaner* scaner;
+    Tree* tree = new Tree();
     scaner = new Scaner("input.txt");
-    Diagram* diagram = new Diagram(scaner);
+    Diagram* diagram = new Diagram(scaner, tree);
  
     diagram->Program();
 
@@ -21,6 +23,7 @@ int main()
         std::cout << "OK" << std::endl;
     else
         std::cout << "ERROR" << std::endl;
+    tree->print(0);
 
     return 0;
 }

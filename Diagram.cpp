@@ -1,8 +1,9 @@
 #include "Diagram.h"
 
-Diagram::Diagram(Scaner* scaner)
+Diagram::Diagram(Scaner* scaner, Tree* tree)
 {
 	this->scaner = scaner;
+	this->tree = tree;
 }
 
 int Diagram::LookForward(int pos) 
@@ -140,6 +141,7 @@ void Diagram::Type()
 void Diagram::Variable() 
 {
 	type_lex lex;
+	Node* newNode = new Node();
 	int type = LookForward(1);
 
 	if (type != typeId) 

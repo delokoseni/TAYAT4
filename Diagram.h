@@ -1,11 +1,13 @@
 ﻿#pragma once
 
 #include "Scaner.h"
+#include "Tree.h"
 
 class Diagram
 {
 private:
 	Scaner* scaner;
+	Tree* tree;
 	void Description();						// Описание
 	void Data();							// Данные
 	void Function();						// Функция
@@ -30,6 +32,7 @@ private:
 	int Scan(type_lex lex);
 	
 public:
-	Diagram(Scaner* scaner);
+	Diagram(Scaner* scaner, Tree* tree);
 	void Program();							// Программа
+
 };
