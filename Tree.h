@@ -27,7 +27,6 @@ struct Node
 	type_data dataType;
 	int flagInit;
 	Tree* pointer; // Указатель на узел
-	Tree* classPointer; // Указатель на класс
 	void setInit() 
 	{
 		flagInit = 1;

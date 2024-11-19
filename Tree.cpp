@@ -65,11 +65,6 @@ Tree* Tree::getRight()
 	return this->right;
 }
 
-Tree* Tree::getNode()
-{
-	return this->node->classPointer;
-}
-
 Tree* Tree::findUp(Tree* from, std::string id)
 {
 	Tree* current = from;
@@ -293,7 +288,7 @@ std::string Tree::getSelfId()
 
 bool Tree::isSelfInit()
 {
-	return node->flagInit;
+	return node->flagInit; // Ошибка!
 }
 
 bool Tree::canBeAdded(type_data type1, type_data type2) {
