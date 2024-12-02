@@ -71,6 +71,7 @@ public:
 	Tree* findRightLeft(std::string id);
 	Tree* findLeft(Tree* from, std::string id);
 	Tree* findLeft(std::string id);
+	void SetInit();
 
 	type_data getDataType(int);
 

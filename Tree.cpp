@@ -308,3 +308,7 @@ bool Tree::canBeAdded(int type1, int type2) {
 	}
 	return false;
 }
+
+void Tree::SetInit() {
+	this->node->flagInit = 1;
+}

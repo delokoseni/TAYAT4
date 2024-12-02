@@ -224,6 +224,7 @@ void Diagram::Assignment()
 	if (node == NULL) {
 		scaner->PrintError("Semant Error. ID is not found", lex);
 	}
+	node->SetInit();
 
 	// Äàëåå ïðîâåðêà òèïà
 	type_data varType = node->getSelfDataType();
