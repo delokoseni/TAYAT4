@@ -538,6 +538,8 @@ void Diagram::ElementaryExpression()
 		{
 			scaner->PrintError("Semant Error. Variable not found", lex);
 		}
+		if(node != NULL)
+
 		if (node->isSelfInit() == 0)
 		{
 			scaner->PrintError("Semant Error. Variable is not initialized", lex);

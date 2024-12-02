@@ -82,7 +82,7 @@ void Scaner::PrintError(const std::string& error, const std::string& lexeme)
         std::cout << ", найдено: " << lexeme;
     }
     std::cout << std::endl;
-
+    exit(1);
 }
 
 int Scaner::UseScaner(type_lex lex)
