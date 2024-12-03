@@ -26,46 +26,46 @@ Tree::~Tree()
 
 void Tree::PrintError(std::string errorMessage, std::string lexeme)
 {
-	std::cout << "Semant Error. " << errorMessage << " Find: " << lexeme << std::endl;
+	std::cout << "Семантическая ошибка. " << errorMessage << " Найдено: " << lexeme << std::endl;
 	exit(1);
 }
 
-void Tree::setLeft(Node* node)
+void Tree::SetLeft(Node* node)
 {
 	this->left = new Tree(this, NULL, NULL, node);
 }
 
-Tree* Tree::findMethod(const type_lex& lex) {
+Tree* Tree::FindFunction(const type_lex& lex) {
 	Tree* currentNode = this;
 
-	// Ïåðåáèðàåì óçëû â äåðåâå
+	// Перебираем узлы в дереве
 	while (currentNode != nullptr) {
 		if (currentNode->node != nullptr &&
 			currentNode->node->id == lex &&
-			currentNode->node->objectType == OBJ_FUNC) { // Ïðîâåðêà íà òèï îáúåêòà
-			return currentNode; // Åñëè íàøëè ìåòîä, âåðíåì åãî
+			currentNode->node->objectType == OBJ_FUNC) { // Проверка на тип объекта
+			return currentNode; // Если найдена функция, возвращаем ее
 		}
-		currentNode = currentNode->getRight(); // Ïðîäâèæåíèå ê ñëåäóþùåìó óçëó
+		currentNode = currentNode->GetRight(); // Переход к следующему узлу
 	}
-	return nullptr; // Ìåòîä íå íàéäåí
+	return nullptr; // Метод не найден
 }
 
-void Tree::setRight(Node* node)
+void Tree::SetRight(Node* node)
 {
 	this->right = new Tree(this, NULL, NULL, node);
 }
 
-Tree* Tree::getLeft()
+Tree* Tree::GetLeft()
 {
 	return this->left;
 }
 
-Tree* Tree::getRight()
+Tree* Tree::GetRight()
 {
 	return this->right;
 }
 
-Tree* Tree::findUp(Tree* from, std::string id)
+Tree* Tree::FindUp(Tree* from, std::string id)
 {
 	Tree* current = from;
 
@@ -79,12 +79,12 @@ Tree* Tree::findUp(Tree* from, std::string id)
 	return current;
 }
 
-Tree* Tree::findUp(std::string id)
+Tree* Tree::FindUp(std::string id)
 {
-	return findUp(this, id);
+	return FindUp(this, id);
 }
 
-Tree* Tree::findUp(Tree* from, std::string id, type_object type)
+Tree* Tree::FindUp(Tree* from, std::string id, type_object type)
 {
 	Tree* current = from;
 
@@ -99,12 +99,12 @@ Tree* Tree::findUp(Tree* from, std::string id, type_object type)
 	return current;
 }
 
-Tree* Tree::findUp(std::string id, type_object type)
+Tree* Tree::FindUp(std::string id, type_object type)
 {
-	return findUp(this, id, type);
+	return FindUp(this, id, type);
 }
 
-Tree* Tree::findUp(Tree* from, type_object type)
+Tree* Tree::FindUp(Tree* from, type_object type)
 {
 	Tree* current = from;
 
@@ -119,12 +119,12 @@ Tree* Tree::findUp(Tree* from, type_object type)
 	return current;
 }
 
-Tree* Tree::findUp(type_object type)
+Tree* Tree::FindUp(type_object type)
 {
-	return findUp(this, type);
+	return FindUp(this, type);
 }
 
-Tree* Tree::findUpOneLevel(Tree* from, std::string id)
+Tree* Tree::FindUpOneLevel(Tree* from, std::string id)
 {
 	Tree* current = from;
 
@@ -138,7 +138,7 @@ Tree* Tree::findUpOneLevel(Tree* from, std::string id)
 	return NULL;
 }
 
-Tree* Tree::findRightLeft(Tree* from, std::string id)
+Tree* Tree::FindRightLeft(Tree* from, std::string id)
 {
 	Tree* curNode = from->right;
 	while (curNode != NULL) {
@@ -151,12 +151,12 @@ Tree* Tree::findRightLeft(Tree* from, std::string id)
 	return curNode;
 }
 
-Tree* Tree::findRightLeft(std::string id)
+Tree* Tree::FindRightLeft(std::string id)
 {
-	return findRightLeft(this, id);
+	return FindRightLeft(this, id);
 }
 
-Tree* Tree::findLeft(Tree* from, std::string id)
+Tree* Tree::FindLeft(Tree* from, std::string id)
 {
 	Tree* current = from;
 
@@ -172,12 +172,12 @@ Tree* Tree::findLeft(Tree* from, std::string id)
 	return current;
 }
 
-Tree* Tree::findLeft(std::string id)
+Tree* Tree::FindLeft(std::string id)
 {
-	return findLeft(this, id);
+	return FindLeft(this, id);
 }
 
-type_data Tree::getDataType(int type)
+type_data Tree::GetDataType(int type)
 {
 	if (type == typeInt) return TYPE_INTEGER;
 	if (type == typeShort) return TYPE_SHORT;
@@ -186,113 +186,113 @@ type_data Tree::getDataType(int type)
 	return TYPE_UNKNOWN;
 }
 
-type_data Tree::getTypeResult(type_data type1, type_data type2, int operation) {
+type_data Tree::GetTypeResult(type_data type1, type_data type2, int operation) {
 	if (operation >= typeUnEq && operation <= typeMore) return TYPE_SHORT;
-	//if (operation == typeMod && (type1 == TYPE_DOUBLE || type2 == TYPE_DOUBLE)) return TYPE_UNKNOWN;   !!!
 	if (operation == typeMod && (type1 == TYPE_FLOAT || type2 == TYPE_FLOAT)) return TYPE_UNKNOWN;
 	if (type1 >= type2) return type1;
 
 	return type2;
 }
 
-void Tree::print() {
+void Tree::Print() {
 	if (node != NULL) {
-		std::cout << "node: " << node->id << " ";
+		std::cout << "узел: " << node->id << " ";
 	}
 
 	if (left != NULL) {
-		std::cout << "left: " << left->node->id << " ";
-		left->print(); // рекурсивный вызов для левого дочернего узла
+		std::cout << "лево: " << left->node->id << " ";
+		left->Print(); // рекурсивный вызов для левого дочернего узла
 	}
 
 	if (right != NULL) {
-		std::cout << "right: " << right->node->id << " ";
-		right->print(); // рекурсивный вызов для правого дочернего
+		std::cout << "право: " << right->node->id << " ";
+		right->Print(); // рекурсивный вызов для правого дочернего
 	}
 	std::cout << std::endl;
 }
 
-void Tree::print(int level) {
-	// Óâåëè÷èâàåì îòñòóï äëÿ îòîáðàæåíèÿ èåðàðõèè
-	std::string indent(level * 2, ' ');
-
+void Tree::Print(int level) {
+	//std::string indent(level * 2, ' ');
+	std::string indent = "";
+	std::cout << std::endl;
 	if (node != NULL) {
 		if (node->id == "")
-			std::cout << "Node: " << "\n";
+			std::cout << "Узел: ";
 		else
-			std::cout << "Node: " << node->id << "\n";
+			std::cout << "Узел: " << node->id;
 	}
 	else
 	{
-		std::cout << indent << "Node: \n";
+		std::cout << indent << "Узел: ";
 	}
 	if (right != NULL) {
 
-		std::cout << indent << "Right -> ";
+		std::cout << indent << " Право -> " << right->node->id;
 
-		right->print(level + 1); // ðåêóðñèâíûé âûçîâ äëÿ ïðàâîãî äî÷åðíåãî óçëà
+		//right->Print(level + 1); // Рекурсивный вывод для правого дочернего узла
 
 	}
 	if (left != NULL) {
-		std::cout << indent << "Left -> ";
-		left->print(level + 1); // ðåêóðñèâíûé âûçîâ äëÿ ëåâîãî äî÷åðíåãî óçëà
+		std::cout << indent << " Лево ->" << left->node->id;
+		//left->Print(level + 1); // Рекурсивный вывод для левого дочернего узла
+	}
+	if (right != NULL) {
 
+		//std::cout << indent << " Право -> ";
+
+		right->Print(level + 1); // Рекурсивный вывод для правого дочернего узла
+
+	}
+	if (left != NULL) {
+		//std::cout << indent << " Лево ->";
+		left->Print(level + 1); // Рекурсивный вывод для левого дочернего узла
 	}
 }
 
-
-bool Tree::isDoublicateId(Tree* addr, std::string id) {
-	if (findUpOneLevel(addr, id) == NULL) return false;
+bool Tree::IsDoublicateId(Tree* addr, std::string id) {
+	if (FindUpOneLevel(addr, id) == NULL) return false;
 	return true;
 }
 
-bool Tree::isAllowChangeId(std::string id) {
-	Tree* node = findUp(id);
-
-	//if (node->node->objectType != OBJ_VAR && node->node->objectType != OBJ_CLASS_OBJ) return false;  !!
+bool Tree::IsAllowChangeId(std::string id) {
+	Tree* node = FindUp(id);
 	if (node->node->objectType != OBJ_VAR)
 		return false;
 	return true;
 }
 
-bool Tree::isMainExists() {
+bool Tree::IsMainExists() {
 	Tree* root = this;
 
 	while (root->up != NULL) root = root->up;
 
-	Tree* main = root->findLeft("main");
+	Tree* main = root->FindLeft("main");
 
 	if (main == NULL) return false;
 	return true;
 }
 
-type_object Tree::getSelfObjectType()
+type_object Tree::GetSelfObjectType()
 {
 	return node->objectType;
 }
 
-Tree* Tree::getClassPointer()
-{
-	return node->pointer;
-}
-
-type_data Tree::getSelfDataType()
+type_data Tree::GetSelfDataType()
 {
 	return node->dataType;
 }
 
-std::string Tree::getSelfId()
+std::string Tree::GetSelfId()
 {
 	return node->id;
 }
 
-bool Tree::isSelfInit()
+bool Tree::IsSelfInit()
 {
-	return node->flagInit; // Ошибка!
+	return node->flagInit; 
 }
 
-bool Tree::canBeAdded(type_data type1, type_data type2) {
-	// Äëÿ ïðèìåðà: òîëüêî ÷èñëîâûå òèïû ìîæíî ñêëàäûâàòü
+bool Tree::CanBeAdded(type_data type1, type_data type2) {
 	if ((type1 == typeInt || type1 == typeFloat) &&
 		(type2 == typeInt || type2 == typeFloat)) {
 		return true;
@@ -300,8 +300,7 @@ bool Tree::canBeAdded(type_data type1, type_data type2) {
 	return false;
 }
 
-bool Tree::canBeAdded(int type1, int type2) {
-	// Äëÿ ïðèìåðà: òîëüêî ÷èñëîâûå òèïû ìîæíî ñêëàäûâàòü
+bool Tree::CanBeAdded(int type1, int type2) {
 	if ((type1 == typeInt || type1 == typeFloat) &&
 		(type2 == typeInt || type2 == typeFloat)) {
 		return true;

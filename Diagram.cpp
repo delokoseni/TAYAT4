@@ -100,23 +100,23 @@ void Diagram::Function()
 		scaner->PrintError("ожидался идентификатор, ", lex);
 	}
 
-	if (tree->isDoublicateId(tree, lex)) {
-		scaner->PrintError("Reassignment", lex);
+	if (tree->IsDoublicateId(tree, lex)) {
+		scaner->PrintError("Переопределение", lex);
 	}
 
-	// Ñîçäàåì íîâûé óçåë äëÿ ôóíêöèè
+	// Создаём новый узел для функции
 	Node* newNode = new Node();
-	newNode->id = lex;  // Ñîõðàíÿåì èäåíòèôèêàòîð
+	newNode->id = lex;  // Назначаем идентификатор
 	newNode->objectType = OBJ_FUNC;
-	newNode->dataType = tree->getDataType(type);
+	newNode->dataType = tree->GetDataType(type);
 
-	// Çàïèñûâàåì óçåë â äåðåâî
-	tree->setLeft(newNode);
-	tree = tree->getLeft(); // Ïåðåõîä ê íîâîìó óçëó
-	tree->setRight(NULL);
+	// Вставляем узел в дерево
+	tree->SetLeft(newNode);
+	tree = tree->GetLeft(); // Переход к новому узлу
+	tree->SetRight(NULL);
 
-	Tree* tmpTree = tree; // Ñîõðàíÿåì òåêóùåå ñîñòîÿíèå äåðåâà
-	tree = tree->getRight(); // Ïåðåõîä ê ïðàâîìó ïîääåðåâó
+	Tree* tmpTree = tree; // Сохраняем текущий указатель дерева
+	tree = tree->GetRight(); // Переход к правому поддереву
 
 	type = Scan(lex);
 	if (type != typeLeftBracket)
@@ -138,7 +138,7 @@ void Diagram::Function()
 
 	OperatorsAndDescriptions();
 
-	// Âåðíåìñÿ ê ïðåäûäóùåìó óçëó
+	// Возвращаемся к предыдущему узлу
 	tree = tmpTree;
 
 	type = Scan(lex);
@@ -166,7 +166,7 @@ void Diagram::Variable()
 	int type = LookForward(1);
 
 	Tree* varNode = NULL;
-	type_data typeData = tree->getDataType(type);
+	type_data typeData = tree->GetDataType(type);
 
 	if (type != typeId) 
 	{
@@ -177,13 +177,13 @@ void Diagram::Variable()
 	int pointer = scaner->GetUK();
 	type = Scan(lex);
 
-	if (tree->isDoublicateId(tree, lex)) {
-		tree->PrintError("Reassignment", lex);
+	if (tree->IsDoublicateId(tree, lex)) {
+		tree->PrintError("Переопределение", lex);
 	}
 
-	newNode->id = lex;  // Ñîõðàíÿåì èäåíòèôèêàòîð
+	newNode->id = lex;  // Устанавливаем идентификатор
 
-	newNode->dataType = tree->getDataType(type);
+	newNode->dataType = tree->GetDataType(type);
 	type = LookForward(1);
 	if (type == typeEval) {
 		newNode->flagInit = 1;
@@ -193,11 +193,11 @@ void Diagram::Variable()
 		newNode->flagInit = 0;
 	}
 
-	// Äîáàâëÿåì óçåë â äåðåâî
-	tree->setLeft(newNode);
+	// Добавляем узел в левое поддерево
+	tree->SetLeft(newNode);
 
-	// Ïåðåõîä ê ëåâîìó äî÷åðíåìó óçëó äëÿ äàëüíåéøèõ îïåðàöèé
-	tree = tree->getLeft();
+	// Переход к левому дочернему узлу для дальнейших операций
+	tree = tree->GetLeft();
 
 	scaner->PutUK(pointer);
 
@@ -220,14 +220,14 @@ void Diagram::Assignment()
 		scaner->PrintError("ожидался идентификатор, ", lex);
 	}
 
-	Tree* node = tree->findUp(lex);
+	Tree* node = tree->FindUp(lex);
 	if (node == NULL) {
-		scaner->PrintError("Semant Error. ID is not found", lex);
+		scaner->PrintError("Семантическая ошибка. ID не найден", lex);
 	}
 	node->SetInit();
 
-	// Äàëåå ïðîâåðêà òèïà
-	type_data varType = node->getSelfDataType();
+	// Получаем тип переменной узла
+	type_data varType = node->GetSelfDataType();
 
 	type = Scan(lex);
 	if (type != typeEval)
@@ -258,7 +258,7 @@ void Diagram::CompositeOperator()
 	type_lex lex;
 	int type = Scan(lex);
 	Tree* varNode = NULL;
-	type_data typeData = tree->getDataType(type);
+	type_data typeData = tree->GetDataType(type);
 
 	if (type != typeLeftBrace)
 	{
@@ -270,11 +270,11 @@ void Diagram::CompositeOperator()
 	newNode->objectType = OBJ_FUNC;
 	newNode->dataType = typeData;
 	if (varNode != NULL) newNode->pointer = varNode;
-	tree->setLeft(newNode);
-	tree = tree->getLeft();
-	tree->setRight(NULL);
+	tree->SetLeft(newNode);
+	tree = tree->GetLeft();
+	tree->SetRight(NULL);
 	Tree* tmpTree = tree;
-	tree = tree->getRight();
+	tree = tree->GetRight();
 
 	OperatorsAndDescriptions();
 
@@ -413,19 +413,20 @@ void Diagram::FunctionCall()
 		scaner->PrintError("ожидался идентификатор, ", lex);
 	}
 
-	// Èùåì óçåë, ñîîòâåòñòâóþùèé îáúåêòó
-	Tree* objectNode = tree->findUp(lex);
-	// Çäåñü âûïîëíÿåì ïîèñê ìåòîäà
-	Tree* methodNode = objectNode->findMethod(lex); // Ìåòîä äëÿ ïîèñêà ïî èìåíè ìåòîäà â ïîõîæå íà findUp
+	// Ищем узел, называющийся объектом
+	Tree* objectNode = tree->FindUp(lex);
+	// Получаем указатель на функцию из функции с тем же именем в родительском узле
+	Tree* methodNode = objectNode->FindFunction(lex); // Функция для поиска по имени функции в родительском узле на findUp
 	if (methodNode == NULL) {
-		scaner->PrintError("Method not found", lex);
-		return; // Âûõîä èç ôóíêöèè ïðè îøèáêå
+		scaner->PrintError("Функция не найдена", lex);
+		return; // Выход из функции при ошибке
 	}
 
-	// Ïðîâåðÿåì, ÷òî óçåë ÿâëÿåòñÿ ôóíêöèåé
-	if (methodNode->getSelfObjectType() != OBJ_FUNC) {
-		scaner->PrintError("Not a method", lex);
+	// Проверяем, что узел является функцией
+	if (methodNode->GetSelfObjectType() != OBJ_FUNC) {
+		scaner->PrintError("Не является функцией", lex);
 	}
+
 
 	type = Scan(lex);
 	if (type != typeLeftBracket)
@@ -454,10 +455,10 @@ void Diagram::Comparison()
 	while (type == typeLess || type == typeLessOrEq || type == typeMore || type == typeMoreOrEq) 
 	{
 		type = Scan(lex);
-		Tree* node = tree->findUp(lex);
-		if (node == nullptr) {
-			scaner->PrintError("Semant Error. Variable is not initialized", lex);
-		}
+		Tree* node = tree->FindUp(lex);
+		//if (node == nullptr) {
+		//	scaner->PrintError("Семантическая ошибка. Переменная не инициализирована", lex);
+		//}
 		BitwiseShift();
 		type = LookForward(1);
 	}
@@ -500,10 +501,10 @@ void Diagram::Multiplier()
 	while (type == typeMul || type == typeDiv || type == typeMod) 
 	{
 		type = Scan(lex);
-		Tree* node = tree->findUp(lex);
-		if (!node->isSelfInit()) 
+		Tree* node = tree->FindUp(lex);
+		if (!node->IsSelfInit()) 
 		{
-			scaner->PrintError("Semant Error. Variable is not initialized", lex);
+			scaner->PrintError("Семантическая ошибка. Переменная не инициализирована", lex);
 		}
 		UnaryOperation();
 		type = LookForward(1);
@@ -534,16 +535,16 @@ void Diagram::ElementaryExpression()
 	if (type == typeId) 
 	{
 		type = Scan(lex);
-		Tree* node = tree->findUp(lex);
+		Tree* node = tree->FindUp(lex);
 		if (node == nullptr)
 		{
-			scaner->PrintError("Semant Error. Variable not found", lex);
+			scaner->PrintError("Семантическая ошибка. Переменная не найдена", lex);
 		}
 		if(node != NULL)
 
-		if (node->isSelfInit() == 0)
+		if (node->IsSelfInit() == 0)
 		{
-			scaner->PrintError("Semant Error. Variable is not initialized", lex);
+			scaner->PrintError("Семантическая ошибка. Переменная не инициализирована", lex);
 		}
 		return;
 	}

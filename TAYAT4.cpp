@@ -23,7 +23,7 @@ int main()
         std::cout << "OK" << std::endl;
     else
         std::cout << "ERROR" << std::endl;
-    tree->print(0);
+    tree->Print(0);
 
     return 0;
 }

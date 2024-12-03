@@ -325,25 +325,6 @@ int Scaner::UseScaner(type_lex lex)
     }
 }
 
-/*void Scaner::GetData(const std::string& filename)
-{
-    std::ifstream file(filename);
-    if (file.is_open())
-    {
-        std::stringstream buffer;
-        buffer << file.rdbuf();
-        text = buffer.str(); // Сохраняем текст из файла
-        text += '\n';
-
-        std::cout << "Текст программы:" << std::endl << text << std::endl;
-        std::cout << std::endl << "Результат работы сканера:" << std::endl;
-    }
-    else
-    {
-        PrintError("Ошибка открытия файла.", filename);
-    }
-}*/
-
 Scaner::Scaner(const std::string& filename)
 {
     GetData(filename);

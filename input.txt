@@ -1,32 +1,14 @@
+int t;
 int main()
 {
-	//float b1 = 6.6, key, key1;
-	//float b2 = 6.1;
-	//float f = -(b2 << b1);
-	//float f2 = b1 >> b2;
-	//short c; // Комментарий
-	//function();
-	//b1 + b2;
-	//b1 << b2;
-	//b1 - 3;
-	//b1 = b2;
-	//int a;
-	while(a != 0);
-	while(a > 0)
-	{
-		a = 50;
-	}
-	while(a < 0)
-	{
-		a = a + 1;
-		a = a + 2;
-	}
-	;;;;;
-	{{{}}}
+	long a = 0;
+	short c = 4;
+	c = a;
 	return 0;
 }
-int function()
+int g()
+{}
+int f()
 {
-	int a = 7;
-	return 1 + 7;
+g=0;
 }

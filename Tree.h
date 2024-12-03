@@ -44,45 +44,36 @@ public:
 	Tree();
 	Tree(Tree*, Tree*, Tree*, Node*);
 	~Tree();
-
-	Tree* findMethod(const type_lex& lex);
 	void PrintError(std::string errorMessage, std::string lexeme);
-
-	void setLeft(Node*);
-	void setRight(Node*);
-
-	Tree* getLeft();
-	Tree* getRight();
-	Tree* getNode();
-	type_object getSelfObjectType();
-	Tree* getClassPointer();
-	type_data getSelfDataType();
-	std::string getSelfId();
-	bool isSelfInit();
-
-	Tree* findUp(Tree*, std::string);
-	Tree* findUp(std::string);
-	Tree* findUp(Tree*, std::string, type_object);
-	Tree* findUp(std::string, type_object);
-	Tree* findUp(Tree*, type_object);
-	Tree* findUp(type_object);
-	Tree* findUpOneLevel(Tree*, std::string);
-	Tree* findRightLeft(Tree* from, std::string id);
-	Tree* findRightLeft(std::string id);
-	Tree* findLeft(Tree* from, std::string id);
-	Tree* findLeft(std::string id);
+	void SetLeft(Node*);
+	void SetRight(Node*);
+	Tree* GetLeft();
+	Tree* GetRight();
+	type_object GetSelfObjectType();
+	type_data GetSelfDataType();
+	std::string GetSelfId();
+	bool IsSelfInit();
+	Tree* FindUp(Tree*, std::string);
+	Tree* FindUp(std::string);
+	Tree* FindUp(Tree*, std::string, type_object);
+	Tree* FindUp(std::string, type_object);
+	Tree* FindUp(Tree*, type_object);
+	Tree* FindUp(type_object);
+	Tree* FindFunction(const type_lex& lex);
+	Tree* FindUpOneLevel(Tree*, std::string);
+	Tree* FindRightLeft(Tree* from, std::string id);
+	Tree* FindRightLeft(std::string id);
+	Tree* FindLeft(Tree* from, std::string id);
+	Tree* FindLeft(std::string id);
 	void SetInit();
-
-	type_data getDataType(int);
-
-	type_data getTypeResult(type_data, type_data, int);
-
-	void print(int);
-	void print();
-	bool isDoublicateId(Tree*, std::string);
-	bool isAllowChangeId(std::string);
-	bool isMainExists();
-	bool canBeAdded(type_data type1, type_data type2);
-	bool canBeAdded(int type1, int type2);
+	type_data GetDataType(int);
+	type_data GetTypeResult(type_data, type_data, int);
+	void Print(int);
+	void Print();
+	bool IsDoublicateId(Tree*, std::string);
+	bool IsAllowChangeId(std::string);
+	bool IsMainExists();
+	bool CanBeAdded(type_data type1, type_data type2);
+	bool CanBeAdded(int type1, int type2);
 
 };
