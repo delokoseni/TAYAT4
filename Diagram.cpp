@@ -94,6 +94,8 @@ void Diagram::Function()
 		scaner->PrintError("ожидался тип (int, short, long, float), ", lex);
 	}
 
+	int type1 = type;
+
 	type = Scan(lex);
 	if (type != typeId && type != typeMain)
 	{
@@ -108,7 +110,7 @@ void Diagram::Function()
 	Node* newNode = new Node();
 	newNode->id = lex;  // Назначаем идентификатор
 	newNode->objectType = OBJ_FUNC;
-	newNode->dataType = tree->GetDataType(type);
+	newNode->dataType = tree->GetDataType(type1);
 
 	// Вставляем узел в дерево
 	tree->SetLeft(newNode);
