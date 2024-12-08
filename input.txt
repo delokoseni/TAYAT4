@@ -1,9 +1,12 @@
 int t;
 int main()
 {
-	long a = 0;
-	short c = 4;
-	c = a;
+	{
+		long a = 0;
+		{
+			short c = a;
+		}
+	}
 	return 0;
 }
 int g()

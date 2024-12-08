@@ -69,7 +69,6 @@ public:
 	type_data GetDataType(int);
 	type_data GetTypeResult(type_data, type_data, int);
 	void Print(int);
-	void Print();
 	bool IsDoublicateId(Tree*, std::string);
 	bool IsAllowChangeId(std::string);
 	bool IsMainExists();

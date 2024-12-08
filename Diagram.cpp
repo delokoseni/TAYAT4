@@ -164,8 +164,6 @@ void Diagram::Variable()
 	type_lex lex;
 	Node* newNode = new Node();
 	int type = LookForward(1);
-
-	Tree* varNode = NULL;
 	type_data typeData = tree->GetDataType(type);
 
 	if (type != typeId) 
@@ -221,6 +219,7 @@ void Diagram::Assignment()
 	}
 
 	Tree* node = tree->FindUp(lex);
+
 	if (node == NULL) {
 		scaner->PrintError("Семантическая ошибка. ID не найден", lex);
 	}
@@ -228,7 +227,8 @@ void Diagram::Assignment()
 
 	// Получаем тип переменной узла
 	type_data varType = node->GetSelfDataType();
-
+	std::cout << "lex: " << lex << std::endl;
+	std::cout << "Type: " << node->GetSelfObjectType() << std::endl;
 	type = Scan(lex);
 	if (type != typeEval)
 	{
@@ -456,9 +456,6 @@ void Diagram::Comparison()
 	{
 		type = Scan(lex);
 		Tree* node = tree->FindUp(lex);
-		//if (node == nullptr) {
-		//	scaner->PrintError("Семантическая ошибка. Переменная не инициализирована", lex);
-		//}
 		BitwiseShift();
 		type = LookForward(1);
 	}

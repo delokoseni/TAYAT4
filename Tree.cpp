@@ -194,25 +194,7 @@ type_data Tree::GetTypeResult(type_data type1, type_data type2, int operation) {
 	return type2;
 }
 
-void Tree::Print() {
-	if (node != NULL) {
-		std::cout << "узел: " << node->id << " ";
-	}
-
-	if (left != NULL) {
-		std::cout << "лево: " << left->node->id << " ";
-		left->Print(); // рекурсивный вызов для левого дочернего узла
-	}
-
-	if (right != NULL) {
-		std::cout << "право: " << right->node->id << " ";
-		right->Print(); // рекурсивный вызов для правого дочернего
-	}
-	std::cout << std::endl;
-}
-
 void Tree::Print(int level) {
-	//std::string indent(level * 2, ' ');
 	std::string indent = "";
 	std::cout << std::endl;
 	if (node != NULL) {
@@ -228,23 +210,16 @@ void Tree::Print(int level) {
 	if (right != NULL) {
 
 		std::cout << indent << " Право -> " << right->node->id;
-
-		//right->Print(level + 1); // Рекурсивный вывод для правого дочернего узла
-
 	}
 	if (left != NULL) {
 		std::cout << indent << " Лево ->" << left->node->id;
-		//left->Print(level + 1); // Рекурсивный вывод для левого дочернего узла
 	}
 	if (right != NULL) {
-
-		//std::cout << indent << " Право -> ";
 
 		right->Print(level + 1); // Рекурсивный вывод для правого дочернего узла
 
 	}
 	if (left != NULL) {
-		//std::cout << indent << " Лево ->";
 		left->Print(level + 1); // Рекурсивный вывод для левого дочернего узла
 	}
 }
