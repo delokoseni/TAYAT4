@@ -180,6 +180,7 @@ void Diagram::Variable()
 	}
 
 	newNode->id = lex;  // Устанавливаем идентификатор
+	newNode->objectType = OBJ_VAR;
 
 	newNode->dataType = tree->GetDataType(type);
 	type = LookForward(1);
@@ -228,7 +229,8 @@ void Diagram::Assignment()
 	// Получаем тип переменной узла
 	type_data varType = node->GetSelfDataType();
 	std::cout << "lex: " << lex << std::endl;
-	std::cout << "Type: " << node->GetSelfObjectType() << std::endl;
+	std::cout << "object type: " << node->GetSelfObjectType() << std::endl;
+	std::cout << "data type: " << node->GetSelfDataType() << std::endl;
 	type = Scan(lex);
 	if (type != typeEval)
 	{
