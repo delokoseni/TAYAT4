@@ -154,7 +154,7 @@ void Diagram::Type()
 {
 	type_lex lex;
 	int type;
-	type = Scan(lex);
+	type = LookForward(1);
 	if (type != typeInt && type != typeShort && type != typeLong && type != typeFloat)
 	{
 		scaner->PrintError("ожидался тип (int, short, long, float), ", lex);
@@ -165,7 +165,22 @@ void Diagram::Variable()
 {
 	type_lex lex;
 	Node* newNode = new Node();
-	int type = LookForward(1);
+	int type = Scan(lex);
+	if (type != typeInt && type != typeShort && type != typeLong && type != typeFloat)
+	{
+		scaner->PrintError("ожидался тип (int, short, long, float), ", lex);
+	}
+	if (type == typeInt)
+		newNode->dataType = TYPE_INTEGER;
+	else if (type == typeShort)
+		newNode->dataType = TYPE_SHORT;
+	else if (type == typeLong)
+		newNode->dataType = TYPE_LONG;
+	else if (type == typeFloat)
+		newNode->dataType = TYPE_FLOAT;
+	else
+		newNode->dataType = TYPE_UNKNOWN;
+	type = LookForward(1);
 	type_data typeData = tree->GetDataType(type);
 
 	if (type != typeId) 
@@ -184,7 +199,7 @@ void Diagram::Variable()
 	newNode->id = lex;  // Устанавливаем идентификатор
 	newNode->objectType = OBJ_VAR;
 
-	newNode->dataType = tree->GetDataType(type);
+	//newNode->dataType = tree->GetDataType(type);
 	type = LookForward(1);
 	if (type == typeEval) {
 		newNode->flagInit = 1;
@@ -222,7 +237,9 @@ void Diagram::Assignment()
 	}
 
 	Tree* node = tree->FindUp(lex);
-
+	if (node->GetSelfObjectType() != OBJ_VAR) {
+		scaner->PrintError("Семантическая ошибка. Попытка использования не переменной в присваивании", lex);
+	}
 	if (node == NULL) {
 		scaner->PrintError("Семантическая ошибка. ID не найден", lex);
 	}
@@ -254,6 +271,7 @@ void Diagram::Expression()
 		type = Scan(lex);
 		Comparison();
 		type = LookForward(1);
+
 	}
 }
 
@@ -542,11 +560,10 @@ void Diagram::ElementaryExpression()
 			scaner->PrintError("Семантическая ошибка. Переменная не найдена", lex);
 		}
 		if(node != NULL)
-
-		if (node->IsSelfInit() == 0)
-		{
-			scaner->PrintError("Семантическая ошибка. Переменная не инициализирована", lex);
-		}
+			if (node->IsSelfInit() == 0)
+			{
+				scaner->PrintError("Семантическая ошибка. Переменная не инициализирована", lex);
+			}
 		return;
 	}
 	if (type == typeShort || type == typeFloat || type == typeInt || type == typeLong) 
