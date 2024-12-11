@@ -4,6 +4,7 @@ short d()
 }
 int main()
 {	
+	d();
 	int a,b,c;
 	{
 		long a = 0;

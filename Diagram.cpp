@@ -61,13 +61,16 @@ void Diagram::Description()
 void Diagram::List() 
 {
 	type_lex lex;
+	type_lex* lexData;
 	int type, pointer;
-	Variable();
+	int typeData = LookForward(1);
+	Scan(lex);
+	Variable(typeData);
 	type = LookForward(1);
 	while (type == typeComma) 
 	{
 		type = Scan(lex);
-		Variable();
+		Variable(typeData);
 		type = LookForward(1);
 	}
 }
@@ -161,22 +164,22 @@ void Diagram::Type()
 	}
 }
 
-void Diagram::Variable() 
+void Diagram::Variable(int typeData1) 
 {
 	type_lex lex;
 	Node* newNode = new Node();
-	int type = Scan(lex);
-	if (type != typeInt && type != typeShort && type != typeLong && type != typeFloat)
+	int type;
+	if (typeData1 != typeInt && typeData1 != typeShort && typeData1 != typeLong && typeData1 != typeFloat)
 	{
 		scaner->PrintError("ожидался тип (int, short, long, float), ", lex);
 	}
-	if (type == typeInt)
+	if (typeData1 == typeInt)
 		newNode->dataType = TYPE_INTEGER;
-	else if (type == typeShort)
+	else if (typeData1 == typeShort)
 		newNode->dataType = TYPE_SHORT;
-	else if (type == typeLong)
+	else if (typeData1 == typeLong)
 		newNode->dataType = TYPE_LONG;
-	else if (type == typeFloat)
+	else if (typeData1 == typeFloat)
 		newNode->dataType = TYPE_FLOAT;
 	else
 		newNode->dataType = TYPE_UNKNOWN;
@@ -357,6 +360,10 @@ void Diagram::Operator()
 	if (type == typeId && type2 == typeLeftBracket) 
 	{
 		FunctionCall();
+		type = Scan(lex);
+		if (type != typeSemicolon)
+			scaner->PrintError("ожидалась ;, ", lex);
+		
 		return;
 	}
 
@@ -462,11 +469,7 @@ void Diagram::FunctionCall()
 		scaner->PrintError("ожидалась ), ", lex);
 	}
 
-	type = Scan(lex);
-	if (type != typeSemicolon)
-	{
-		scaner->PrintError("ожидалась ;, ", lex);
-	}
+
 }
 
 void Diagram::Comparison() 
@@ -553,17 +556,22 @@ void Diagram::ElementaryExpression()
 	int type = LookForward(1);
 	if (type == typeId) 
 	{
+		if (LookForward(2) == typeLeftBracket) {
+			FunctionCall();
+			return;
+		}
 		type = Scan(lex);
 		Tree* node = tree->FindUp(lex);
 		if (node == nullptr)
 		{
 			scaner->PrintError("Семантическая ошибка. Переменная не найдена", lex);
 		}
+
 		if(node != NULL)
 			if (node->IsSelfInit() == 0)
 			{
 				scaner->PrintError("Семантическая ошибка. Переменная не инициализирована", lex);
-			}
+		}
 		return;
 	}
 	if (type == typeShort || type == typeFloat || type == typeInt || type == typeLong) 
