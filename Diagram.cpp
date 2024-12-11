@@ -202,7 +202,6 @@ void Diagram::Variable(int typeData1)
 	newNode->id = lex;  // Устанавливаем идентификатор
 	newNode->objectType = OBJ_VAR;
 
-	//newNode->dataType = tree->GetDataType(type);
 	type = LookForward(1);
 	if (type == typeEval) {
 		newNode->flagInit = 1;
@@ -240,19 +239,19 @@ void Diagram::Assignment()
 	}
 
 	Tree* node = tree->FindUp(lex);
-	if (node->GetSelfObjectType() != OBJ_VAR) {
-		scaner->PrintError("Семантическая ошибка. Попытка использования не переменной в присваивании", lex);
-	}
+
 	if (node == NULL) {
 		scaner->PrintError("Семантическая ошибка. ID не найден", lex);
 	}
+
+	if (node->GetSelfObjectType() != OBJ_VAR ) {
+		scaner->PrintError("Семантическая ошибка. Попытка использования не переменной в присваивании", lex);
+	}
+
 	node->SetInit();
 
 	// Получаем тип переменной узла
 	type_data varType = node->GetSelfDataType();
-	std::cout << "lex: " << lex << std::endl;
-	std::cout << "object type: " << node->GetSelfObjectType() << std::endl;
-	std::cout << "data type: " << node->GetSelfDataType() << std::endl;
 	type = Scan(lex);
 	if (type != typeEval)
 	{
