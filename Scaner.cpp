@@ -133,6 +133,10 @@ int Scaner::UseScaner(type_lex lex)
             {
                 lex[i++] = text[uk++];
             }
+            if (i == maxNumber - 1 && uk < text.size() && isdigit(text[uk])) {
+                PrintError(" онстанта превышает максимальную длину лексемы: ", lex);
+                return typeError;
+            }
 
             // ќбработка вещественных чисел
             if (uk < text.size() && text[uk] == '.')

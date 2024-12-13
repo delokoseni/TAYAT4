@@ -523,10 +523,10 @@ void Diagram::Multiplier()
 	{
 		type = Scan(lex);
 		Tree* node = tree->FindUp(lex);
-		if (!node->IsSelfInit()) 
+		/*if (!node->IsSelfInit())
 		{
 			scaner->PrintError("Семантическая ошибка. Переменная не инициализирована", lex);
-		}
+		}*/
 		UnaryOperation();
 		type = LookForward(1);
 	}
