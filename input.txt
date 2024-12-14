@@ -1,22 +1,8 @@
 short d()
 {
-	int k = 199999999999999999999999999;
-	return k;
 }
 int main()
 {	
-	int a,b,c;
-	{int f = 0; {short a = f;}}
-	a = 9 * 8;
-	b = 100 / a;
-	c = b % 3;
-	a << b;
-	a << 2;
-	short sd = d();
-	d();
-	while(sd != 0)
-	{
-		sd = sd - 1;
-	}
+	int a = 1000000000;
 	return 0;
 }
