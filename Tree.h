@@ -14,19 +14,43 @@ enum type_data
 enum type_object 
 {
 	OBJ_VAR = 1,
-	OBJ_CONST = 2,
-	OBJ_FUNC = 3,
+	OBJ_FUNC = 2,
 };
 
 class Tree;
 
+union type_value 
+{
+	short Short;
+	int Int;
+	long Long;
+	float Float;
+};
+
+struct Data 
+{ 
+	type_data DataType;
+	type_value Value;
+	Data() 
+	{
+		DataType = TYPE_UNKNOWN;
+		Value.Short = 0;
+		Value.Int = 0;
+		Value.Long = 0;
+		Value.Float = 0;
+	}
+};
+
+
 struct Node 
 {
-	std::string id;
-	type_object objectType;
-	type_data dataType;
-	int flagInit;
-	Tree* pointer; // Указатель на узел
+	std::string id;			// Идентификатор
+	type_lex lex;			// Лексема
+	type_object objectType;	// Тип объекта
+	type_data dataType;		// Тип данных
+	Data data;
+	int flagInit;			// Флаг инициализации
+	Tree* pointer;			// Указатель на узел
 	void setInit() 
 	{
 		flagInit = 1;
