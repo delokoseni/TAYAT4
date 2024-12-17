@@ -201,7 +201,7 @@ void Tree::Print(int level) {
 		if (node->id == "")
 			std::cout << "Узел: ";
 		else
-			std::cout << "Узел: " << node->id << " (Тип данных: " << node->dataType << ") ";
+			std::cout << "Узел: " << node->id << " (Тип данных: " << node->data.DataType << ") ";
 	}
 	else
 	{
@@ -254,7 +254,7 @@ type_object Tree::GetSelfObjectType()
 
 type_data Tree::GetSelfDataType()
 {
-	return node->dataType;
+	return node->data.DataType;
 }
 
 std::string Tree::GetSelfId()

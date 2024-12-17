@@ -113,7 +113,7 @@ void Diagram::Function()
 	Node* newNode = new Node();
 	newNode->id = lex;  // Назначаем идентификатор
 	newNode->objectType = OBJ_FUNC;
-	newNode->dataType = tree->GetDataType(type1);
+	newNode->data.DataType = tree->GetDataType(type1);
 
 	// Вставляем узел в дерево
 	tree->SetLeft(newNode);
@@ -174,15 +174,15 @@ void Diagram::Variable(int typeData1)
 		scaner->PrintError("ожидался тип (int, short, long, float), ", lex);
 	}
 	if (typeData1 == typeInt)
-		newNode->dataType = TYPE_INTEGER;
+		newNode->data.DataType = TYPE_INTEGER;
 	else if (typeData1 == typeShort)
-		newNode->dataType = TYPE_SHORT;
+		newNode->data.DataType = TYPE_SHORT;
 	else if (typeData1 == typeLong)
-		newNode->dataType = TYPE_LONG;
+		newNode->data.DataType = TYPE_LONG;
 	else if (typeData1 == typeFloat)
-		newNode->dataType = TYPE_FLOAT;
+		newNode->data.DataType = TYPE_FLOAT;
 	else
-		newNode->dataType = TYPE_UNKNOWN;
+		newNode->data.DataType = TYPE_UNKNOWN;
 	type = LookForward(1);
 	type_data typeData = tree->GetDataType(type);
 
@@ -292,7 +292,7 @@ void Diagram::CompositeOperator()
 	Node* newNode = new Node();
 	newNode->id = lex;
 	newNode->objectType = OBJ_FUNC;
-	newNode->dataType = typeData;
+	newNode->data.DataType = typeData;
 	if (varNode != NULL) newNode->pointer = varNode;
 	tree->SetLeft(newNode);
 	tree = tree->GetLeft();

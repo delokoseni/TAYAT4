@@ -47,7 +47,6 @@ struct Node
 	std::string id;			// Идентификатор
 	type_lex lex;			// Лексема
 	type_object objectType;	// Тип объекта
-	type_data dataType;		// Тип данных
 	Data data;
 	int flagInit;			// Флаг инициализации
 	Tree* pointer;			// Указатель на узел
