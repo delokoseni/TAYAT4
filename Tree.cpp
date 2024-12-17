@@ -200,8 +200,28 @@ void Tree::Print(int level) {
 	if (node != NULL) {
 		if (node->id == "")
 			std::cout << "Узел: ";
-		else
+		else {
 			std::cout << "Узел: " << node->id << " (Тип данных: " << node->data.DataType << ") ";
+			// Проверка типа данных и вывод соответствующего значения
+			if ((node->objectType == OBJ_VAR) && node->flagInit == 1)
+				switch (node->data.DataType) {
+				case TYPE_INTEGER:
+					std::cout << "Значение: " << node->data.Value.Int << "\n";
+					break;
+				case TYPE_LONG:
+					std::cout << "Значение: " << node->data.Value.Long << "\n";
+					break;
+				case TYPE_SHORT:
+					std::cout << "Значение: " << node->data.Value.Short << "\n";
+					break;
+				case TYPE_FLOAT:
+					std::cout << "Значение: " << node->data.Value.Float << "\n";
+					break;
+				default:
+					std::cout << "Значение: неизвестный тип данных\n";
+					break;
+				}
+		}
 	}
 	else
 	{
