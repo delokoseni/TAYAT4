@@ -324,7 +324,7 @@ void Diagram::OperatorsAndDescriptions()
 	{
 		if (type == typeInt || type == typeShort || type == typeLong || type == typeFloat) 
 		{
-			Data();
+			DataMethod();
 		}
 		else Operator();
 		type = LookForward(1);
