@@ -306,3 +306,58 @@ bool Tree::CanBeAdded(int type1, int type2) {
 void Tree::SetInit() {
 	this->node->flagInit = 1;
 }
+
+bool Tree::SetValue(const std::string& id, const type_value& val) {
+	Tree* node = FindUp(id);  // Метод поиска узла по идентификатору
+	if (node == nullptr) {
+		return false; // Узел не найден
+	}
+	switch (node->node->data.DataType) {
+	case TYPE_INTEGER:
+		node->node->data.Value.Int = (int)val.Float;
+		break;
+	case TYPE_LONG: {
+		node->node->data.Value.Long = (long)val.Float;
+		break;
+	}
+	case TYPE_SHORT: {
+		node->node->data.Value.Short = (short)val.Float;
+		break;
+	}
+	case TYPE_FLOAT: {
+		node->node->data.Value.Float = val.Float;
+		break;
+	}
+	default:
+		break;
+	}
+	return true; // Успешно обновлено
+}
+
+Data* Tree::GetData() {
+	Data* val = new Data;
+	switch (this->node->data.DataType) {
+	case TYPE_INTEGER:
+		val->DataType = TYPE_INTEGER;
+		val->Value.Float = this->node->data.Value.Int;
+		break;
+	case TYPE_LONG: {
+		val->DataType = TYPE_LONG;
+		val->Value.Float = this->node->data.Value.Long;
+		break;
+	}
+	case TYPE_SHORT: {
+		val->DataType = TYPE_SHORT;
+		val->Value.Float = this->node->data.Value.Short;
+		break;
+	}
+	case TYPE_FLOAT: {
+		val->DataType = TYPE_FLOAT;
+		val->Value.Float = this->node->data.Value.Float;
+		break;
+	}
+	default:
+		break;
+	}
+	return val;
+}

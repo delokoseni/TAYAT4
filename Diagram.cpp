@@ -46,7 +46,7 @@ void Diagram::Description()
 	int simbol = LookForward(3);
 	if ((type == typeInt || type == typeShort || type == typeLong || type == typeFloat) && simbol != typeLeftBracket) 
 	{
-		Data();
+		DataMethod();
 		return;
 	}
 	if ((type == typeInt || type == typeShort || type == typeLong || type == typeFloat) && simbol == typeLeftBracket) 
@@ -75,7 +75,7 @@ void Diagram::List()
 	}
 }
 
-void Diagram::Data() 
+void Diagram::DataMethod() 
 {
 	type_lex lex;
 	int type_;
@@ -259,12 +259,15 @@ void Diagram::Assignment()
 	}
 
 	Expression();
+	//Data* val = Expression();
+	//node->SetValue(node->GetSelfId(), val->Value);
 }
 
-void Diagram::Expression() 
+Data* Diagram::Expression() //Доделать
 {
 	type_lex lex;
 	int type;
+	Data* result = new Data();
 
 	Comparison();
 	type = LookForward(1);
@@ -275,6 +278,8 @@ void Diagram::Expression()
 		type = LookForward(1);
 
 	}
+
+	return result;
 }
 
 void Diagram::CompositeOperator() 
@@ -471,8 +476,9 @@ void Diagram::FunctionCall()
 
 }
 
-void Diagram::Comparison() 
+Data* Diagram::Comparison()
 {
+	Data* result = new Data();
 	type_lex lex;
 	BitwiseShift();
 	int type = LookForward(1);
@@ -483,10 +489,12 @@ void Diagram::Comparison()
 		BitwiseShift();
 		type = LookForward(1);
 	}
+	return result;
 }
 
-void Diagram::BitwiseShift()
+Data* Diagram::BitwiseShift()
 {
+	Data* result = new Data();
 	type_lex lex;
 	int type;
 	Summand();
@@ -497,10 +505,12 @@ void Diagram::BitwiseShift()
 		Summand();
 		type = LookForward(1);
 	}
+	return result;
 }
 
-void Diagram::Summand() 
+Data* Diagram::Summand() 
 {
+	Data* result = new Data();
 	type_lex lex;
 	int type;
 	Multiplier();
@@ -511,10 +521,12 @@ void Diagram::Summand()
 		Multiplier();
 		type = LookForward(1);
 	}
+	return result;
 }
 
-void Diagram::Multiplier() 
+Data* Diagram::Multiplier() 
 {
+	Data* result = new Data();
 	type_lex lex;
 	int type;
 	UnaryOperation();
@@ -523,17 +535,15 @@ void Diagram::Multiplier()
 	{
 		type = Scan(lex);
 		Tree* node = tree->FindUp(lex);
-		/*if (!node->IsSelfInit())
-		{
-			scaner->PrintError("Семантическая ошибка. Переменная не инициализирована", lex);
-		}*/
 		UnaryOperation();
 		type = LookForward(1);
 	}
+	return result;
 }
 
-void Diagram::UnaryOperation() 
+Data* Diagram::UnaryOperation() 
 {
+	Data* result = new Data();
 	type_lex lex;
 	int type = LookForward(1);
 
@@ -546,18 +556,21 @@ void Diagram::UnaryOperation()
 	{
 		ElementaryExpression();
 	}
+	return result;
 }
 
 
-void Diagram::ElementaryExpression() 
+
+Data* Diagram::ElementaryExpression() 
 {
+	Data* result = new Data();
 	type_lex lex;
 	int type = LookForward(1);
 	if (type == typeId) 
 	{
 		if (LookForward(2) == typeLeftBracket) {
 			FunctionCall();
-			return;
+			return result;
 		}
 		type = Scan(lex);
 		Tree* node = tree->FindUp(lex);
@@ -571,12 +584,12 @@ void Diagram::ElementaryExpression()
 			{
 				scaner->PrintError("Семантическая ошибка. Переменная не инициализирована", lex);
 		}
-		return;
+		return result;
 	}
 	if (type == typeShort || type == typeFloat || type == typeInt || type == typeLong) 
 	{
 		type = Scan(lex);
-		return;
+		return result;
 	}
 	if (type == typeLeftBracket) 
 	{
@@ -587,8 +600,9 @@ void Diagram::ElementaryExpression()
 		{
 			scaner->PrintError("ожидалась ), ", lex);
 		}
-		return;
+		return result;
 	}
 	type = Scan(lex);
 	scaner->PrintError("ожидалось выражение, ", lex);
+	return result;
 }

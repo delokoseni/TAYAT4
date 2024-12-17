@@ -9,23 +9,23 @@ private:
 	Scaner* scaner;
 	Tree* tree;
 	void Description();						// Описание
-	void Data();							// Данные
+	void DataMethod();							// Данные
 	void Function();						// Функция
 	void Type();							// Тип
 	void List();							// Список
-	void Variable(int typeData);						// Переменная
+	void Variable(int typeData);			// Переменная
 	void Assignment();						// Присваивание
-	void Expression();						// Выражение
+	Data* Expression();						// Выражение
 	void CompositeOperator();				// Составной оператор
 	void OperatorsAndDescriptions();		// Операторы и описания
 	void Operator();						// Оператор
 	void FunctionCall();					// Вызов функции
-	void Comparison();						// Сравнение
-	void BitwiseShift();					// Побитовый сдвиг
-	void Summand();							// Слагаемое
-	void Multiplier();						// Множитель
-	void UnaryOperation();					// Унарная операция
-	void ElementaryExpression();			// Элементарное выражение
+	Data* Comparison();						// Сравнение
+	Data* BitwiseShift();					// Побитовый сдвиг
+	Data* Summand();						// Слагаемое
+	Data* Multiplier();						// Множитель
+	Data* UnaryOperation();					// Унарная операция
+	Data* ElementaryExpression();			// Элементарное выражение
 	void Cycle();							// Цикл
 	void ReturnStatement();					// Оператор возврата (return)
 	int LookForward(int pointer);			

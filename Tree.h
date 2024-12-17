@@ -97,5 +97,6 @@ public:
 	bool IsMainExists();
 	bool CanBeAdded(type_data type1, type_data type2);
 	bool CanBeAdded(int type1, int type2);
-
+	bool SetValue(const std::string& id, const type_value& val);
+	Data* GetData();
 };
