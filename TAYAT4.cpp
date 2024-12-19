@@ -9,7 +9,6 @@ int main()
 {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
-    int b = (100 + 1) << 2;
     Scaner* scaner;
     Tree* tree = new Tree();
     scaner = new Scaner("input.txt");

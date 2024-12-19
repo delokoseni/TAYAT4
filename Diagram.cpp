@@ -506,8 +506,10 @@ Data* Diagram::BitwiseShift()
 	type = LookForward(1);
 	while (type == typeBitwiseRight || type == typeBitwiseLeft) 
 	{
+		if (result->DataType == TYPE_FLOAT)
+			scaner->PrintError("Недопустимый тип данных для побитового сдвига.", lex);
 		type = Scan(lex);
-		if(type == typeBitwiseRight)
+		if (type == typeBitwiseRight)
 			result->Value.Float = (int)result->Value.Float >> (int)Summand()->Value.Float; //Исправить
 		if (type == typeBitwiseLeft)
 			result->Value.Float = (int)result->Value.Float << (int)Summand()->Value.Float; //Исправить
