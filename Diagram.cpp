@@ -258,9 +258,9 @@ void Diagram::Assignment()
 		scaner->PrintError("ожидалось =, ", lex);
 	}
 
-	Expression();
-	//Data* val = Expression();
-	//node->SetValue(node->GetSelfId(), val->Value);
+	//Expression();
+	Data* val = Expression();
+	node->SetValue(node->GetSelfId(), val->Value);
 }
 
 Data* Diagram::Expression() //Доделать
@@ -269,12 +269,16 @@ Data* Diagram::Expression() //Доделать
 	int type;
 	Data* result = new Data();
 
-	Comparison();
+	result = Comparison();
 	type = LookForward(1);
 	while (type == typeEq || type == typeUnEq) 
 	{
 		type = Scan(lex);
-		Comparison();
+		//Comparison();
+		if (type == typeEq) 
+			result->Value.Float = (result->Value.Float == Comparison()->Value.Float);
+		if (type == typeLessOrEq) //???
+			result->Value.Float = !(result->Value.Float == Comparison()->Value.Float);
 		type = LookForward(1);
 
 	}
@@ -480,13 +484,14 @@ Data* Diagram::Comparison()
 {
 	Data* result = new Data();
 	type_lex lex;
-	BitwiseShift();
+	result = BitwiseShift();
 	int type = LookForward(1);
 	while (type == typeLess || type == typeLessOrEq || type == typeMore || type == typeMoreOrEq) 
 	{
 		type = Scan(lex);
 		Tree* node = tree->FindUp(lex);
-		BitwiseShift();
+		//BitwiseShift();
+		result = BitwiseShift();
 		type = LookForward(1);
 	}
 	return result;
@@ -497,12 +502,15 @@ Data* Diagram::BitwiseShift()
 	Data* result = new Data();
 	type_lex lex;
 	int type;
-	Summand();
+	result = Summand();
 	type = LookForward(1);
 	while (type == typeBitwiseRight || type == typeBitwiseLeft) 
 	{
 		type = Scan(lex);
-		Summand();
+		if(type == typeBitwiseRight)
+			result->Value.Float = (int)result->Value.Float >> (int)Summand()->Value.Float; //Исправить
+		if (type == typeBitwiseLeft)
+			result->Value.Float = (int)result->Value.Float << (int)Summand()->Value.Float; //Исправить
 		type = LookForward(1);
 	}
 	return result;
@@ -513,12 +521,16 @@ Data* Diagram::Summand()
 	Data* result = new Data();
 	type_lex lex;
 	int type;
-	Multiplier();
+	result = Multiplier();
 	type = LookForward(1);
 	while (type == typePlus || type == typeMinus) 
 	{
 		type = Scan(lex);
-		Multiplier();
+		//Multiplier();
+		if (type == typePlus)
+			result->Value.Float += Multiplier()->Value.Float;
+		if (type == typeMinus)
+			result->Value.Float -= Multiplier()->Value.Float;
 		type = LookForward(1);
 	}
 	return result;
@@ -529,25 +541,46 @@ Data* Diagram::Multiplier()
 	Data* result = new Data();
 	type_lex lex;
 	int type;
-	UnaryOperation();
+	result = UnaryOperation();
 	type = LookForward(1);
 	while (type == typeMul || type == typeDiv || type == typeMod) 
 	{
 		type = Scan(lex);
-		Tree* node = tree->FindUp(lex);
-		UnaryOperation();
+		//Tree* node = tree->FindUp(lex);
+		//UnaryOperation();
+		if (type == typeMul) {
+			Data* buffer = UnaryOperation();
+			result->DataType = buffer->DataType;
+			result->Value.Float *= buffer->Value.Float;
+		}
+		if (type == typeDiv) {
+			Data* buffer = UnaryOperation();
+			if (buffer->DataType != TYPE_FLOAT && result->DataType != TYPE_FLOAT && result->Value.Float != 0) {
+				result->Value.Float = (int)(result->Value.Float / buffer->Value.Float);
+			}
+			else
+				if (buffer->Value.Float != 0)
+					result->Value.Float /= buffer->Value.Float;
+				else
+					scaner->PrintError("Деление на ноль.", lex);
+		}
+		if (type == typeMod) {
+			Data* buffer = ElementaryExpression(); //???
+			result->DataType = buffer->DataType;
+			result->Value.Float = fmod(result->Value.Float, buffer->Value.Float);
+		}
 		type = LookForward(1);
 	}
 	return result;
 }
 
-Data* Diagram::UnaryOperation() 
+Data* Diagram::UnaryOperation() //Продолжить
 {
 	Data* result = new Data();
 	type_lex lex;
 	int type = LookForward(1);
 
-	if (type == typePlus || type == typeMinus)
+	/*if (type == typePlus || type == typeMinus)
 	{
 		type = Scan(lex);
 		ElementaryExpression();
@@ -555,7 +588,22 @@ Data* Diagram::UnaryOperation()
 	else
 	{
 		ElementaryExpression();
+	}*/
+	if (type == typePlus) {
+		type = Scan(lex);
+		Data* buffer = ElementaryExpression();
+		result->DataType = buffer->DataType;
+		result->Value.Float += buffer->Value.Float;
 	}
+	else
+		if (type == typeMinus) {
+			type = Scan(lex);
+			Data* buffer = ElementaryExpression();
+			result->DataType = buffer->DataType;
+			result->Value.Float -= buffer->Value.Float;
+		}
+		else
+			result = ElementaryExpression();
 	return result;
 }
 
@@ -566,6 +614,30 @@ Data* Diagram::ElementaryExpression()
 	Data* result = new Data();
 	type_lex lex;
 	int type = LookForward(1);
+	if (type == constInt || type == constFloat) {
+		type = Scan(lex);
+		switch (type) {
+		case constInt:
+
+			result->Value.Float = std::stod(std::string(lex));
+			result->DataType = TYPE_INTEGER;
+			return result;
+			break;
+		case constFloat:
+			try {
+				result->Value.Float = std::stod(lex);
+				result->DataType = TYPE_FLOAT;
+			}
+			catch (const std::invalid_argument&) {
+				scaner->PrintError("Недопустимое значение для преобразования целых чисел.", lex);
+			}
+			catch (const std::out_of_range&) {
+				scaner->PrintError("Целочисленное значение выходит за пределы допустимого диапазона.", lex);
+			}
+			return result;
+			break;
+		}
+	}
 	if (type == typeId) 
 	{
 		if (LookForward(2) == typeLeftBracket) {
@@ -584,6 +656,7 @@ Data* Diagram::ElementaryExpression()
 			{
 				scaner->PrintError("Семантическая ошибка. Переменная не инициализирована", lex);
 		}
+		result = node->GetData(); //???
 		return result;
 	}
 	if (type == typeShort || type == typeFloat || type == typeInt || type == typeLong) 
@@ -594,12 +667,10 @@ Data* Diagram::ElementaryExpression()
 	if (type == typeLeftBracket) 
 	{
 		type = Scan(lex);
-		Expression();
+		result = Expression();
 		type = Scan(lex);
 		if (type != typeRightBracket)
-		{
 			scaner->PrintError("ожидалась ), ", lex);
-		}
 		return result;
 	}
 	type = Scan(lex);
