@@ -263,7 +263,7 @@ void Diagram::Assignment()
 	node->SetValue(node->GetSelfId(), val->Value);
 }
 
-Data* Diagram::Expression() //Доделать
+Data* Diagram::Expression() 
 {
 	type_lex lex;
 	int type;
@@ -595,15 +595,13 @@ Data* Diagram::UnaryOperation() //Продолжить
 		result->DataType = buffer->DataType;
 		result->Value.Float += buffer->Value.Float;
 	}
-	else
-		if (type == typeMinus) {
-			type = Scan(lex);
-			Data* buffer = ElementaryExpression();
-			result->DataType = buffer->DataType;
-			result->Value.Float -= buffer->Value.Float;
-		}
-		else
-			result = ElementaryExpression();
+	if (type == typeMinus) {
+		type = Scan(lex);
+		Data* buffer = ElementaryExpression();
+		result->DataType = buffer->DataType;
+		result->Value.Float -= buffer->Value.Float;
+	}
+	result = ElementaryExpression();
 	return result;
 }
 
@@ -614,16 +612,28 @@ Data* Diagram::ElementaryExpression()
 	Data* result = new Data();
 	type_lex lex;
 	int type = LookForward(1);
-	if (type == constInt || type == constFloat) {
+	if (type == typeInt || type == typeFloat || type == typeShort || type == typeLong) {
 		type = Scan(lex);
 		switch (type) {
-		case constInt:
+		case typeInt:
 
 			result->Value.Float = std::stod(std::string(lex));
 			result->DataType = TYPE_INTEGER;
 			return result;
 			break;
-		case constFloat:
+		case typeShort:
+
+			result->Value.Float = std::stod(std::string(lex));
+			result->DataType = TYPE_SHORT;
+			return result;
+			break;
+		case typeLong:
+
+			result->Value.Float = std::stod(std::string(lex));
+			result->DataType = TYPE_LONG;
+			return result;
+			break;
+		case typeFloat:
 			try {
 				result->Value.Float = std::stod(lex);
 				result->DataType = TYPE_FLOAT;

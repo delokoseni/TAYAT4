@@ -3,6 +3,9 @@ short d()
 }
 int main()
 {	
-	int a = 100000;
+	float a = 100.15;
+	int b = (100 + 1) << 2;
+	long c = 1 - 5;
+	short d = 9 / 2;
 	return 0;
 }
