@@ -1,5 +1,7 @@
 short d()
 {
+	int k = 9 + 7 - 5 * 8 / 2 >> 9;
+	return k;
 }
 int main()
 {	
@@ -7,6 +9,10 @@ int main()
 	int b = (100 + 1) << 2;
 	int b1 = (100 + 1) >> 2;
 	long c = 1 - 5*2;
+	long c2 = c + d();
 	short d = 9 / 2;
+	int v = 9 % 2;
+	int v1 = 10 + v;
+	v1 = v1 / 0;
 	return 0;
 }

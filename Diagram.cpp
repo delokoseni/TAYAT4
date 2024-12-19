@@ -557,7 +557,7 @@ Data* Diagram::Multiplier()
 		}
 		if (type == typeDiv) {
 			Data* buffer = UnaryOperation();
-			if (buffer->DataType != TYPE_FLOAT && result->DataType != TYPE_FLOAT && result->Value.Float != 0) {
+			if (buffer->DataType != TYPE_FLOAT && result->DataType != TYPE_FLOAT && buffer->Value.Float != 0) {
 				result->Value.Float = (int)(result->Value.Float / buffer->Value.Float);
 			}
 			else
