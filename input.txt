@@ -13,6 +13,6 @@ int main()
 	short d = 9 / 2;
 	int v = 9 % 2;
 	int v1 = 10 + v;
-	v1 = v1 / 0;
+	//v1 = v1 / 0;
 	return 0;
 }
